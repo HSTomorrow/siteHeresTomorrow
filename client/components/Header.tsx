@@ -29,8 +29,7 @@ export default function Header() {
               <span className="font-mono text-[10px] leading-none text-center">&lt;/&gt;</span>
             </div>
             <div className="hidden sm:block">
-              <div className="text-xs font-bold text-primary tracking-widest">HERES</div>
-              <div className="text-lg font-bold text-primary leading-none">&lt;/Today&gt;</div>
+              <div className="text-lg font-bold text-primary leading-tight">Heres Tomorrow</div>
             </div>
           </Link>
 
