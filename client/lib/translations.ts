@@ -320,7 +320,7 @@ export const translations = {
       message: "Envie-nos uma mensagem",
     },
     footer: {
-      about: "HeresTomorrow é uma firma líder de consultoria tecnológica especializada em soluções empresariais e transformação digital.",
+      about: "HeresTomorrow é uma empresa focada em consultoria tecnológica especializada em soluções empresariais e transformação digital.",
       quickLinks: "Links Rápidos",
       services: "Serviços",
       locations: "Localizações",
