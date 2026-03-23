@@ -47,28 +47,40 @@ export default function Header() {
 
           {/* Right side - Language switcher and Mobile menu */}
           <div className="flex items-center space-x-4">
-            <div className="flex space-x-2 border-l pl-4">
-              <button
-                onClick={() => setLanguage("en")}
-                className={`text-sm font-medium px-2 py-1 rounded transition-colors ${
-                  language === "en"
-                    ? "bg-primary text-white"
-                    : "text-foreground hover:text-primary"
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLanguage("es")}
-                className={`text-sm font-medium px-2 py-1 rounded transition-colors ${
-                  language === "es"
-                    ? "bg-primary text-white"
-                    : "text-foreground hover:text-primary"
-                }`}
-              >
-                ES
-              </button>
+            <div className="hidden sm:flex space-x-1 border-l pl-4">
+              {[
+                { code: "en", label: "EN" },
+                { code: "es", label: "ES" },
+                { code: "pt", label: "PT" },
+                { code: "it", label: "IT" },
+                { code: "fr", label: "FR" },
+              ].map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => setLanguage(lang.code as any)}
+                  className={`text-xs font-medium px-2 py-1 rounded transition-colors ${
+                    language === lang.code
+                      ? "bg-primary text-white"
+                      : "text-foreground hover:text-primary"
+                  }`}
+                >
+                  {lang.label}
+                </button>
+              ))}
             </div>
+
+            {/* Mobile language selector */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as any)}
+              className="sm:hidden text-sm px-2 py-1 border border-primary rounded text-foreground bg-white cursor-pointer"
+            >
+              <option value="en">EN</option>
+              <option value="es">ES</option>
+              <option value="pt">PT</option>
+              <option value="it">IT</option>
+              <option value="fr">FR</option>
+            </select>
 
             {/* Mobile menu button */}
             <button
