@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
 import { useState } from "react";
-import { Menu, X, Leaf } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const { language, setLanguage } = useLanguage();
@@ -23,12 +23,15 @@ export default function Header() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2 font-bold text-2xl text-primary group hover:opacity-80 transition-opacity"
+            className="flex items-center space-x-3 group hover:opacity-80 transition-opacity"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-lg font-bold">
-              <Leaf size={24} className="text-white" />
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+              <span className="font-mono text-[10px] leading-none text-center">&lt;/&gt;</span>
             </div>
-            <span className="hidden sm:inline font-bold">{t("company")}</span>
+            <div className="hidden sm:block">
+              <div className="text-xs font-bold text-primary tracking-widest">HERES</div>
+              <div className="text-lg font-bold text-primary leading-none">&lt;/Today&gt;</div>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

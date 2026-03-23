@@ -5,6 +5,8 @@ export type Language = "en" | "es" | "pt" | "it" | "fr";
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  languageSelected: boolean;
+  setLanguageSelected: (selected: boolean) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -14,10 +16,27 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<Language>("en");
+  // Initialize from localStorage
+  const savedLanguage = localStorage.getItem("selectedLanguage") as Language | null;
+  const [language, setLanguage] = useState<Language>(savedLanguage || "en");
+  const [languageSelected, setLanguageSelected] = useState(!!savedLanguage);
+
+  const handleSetLanguage = (lang: Language) => {
+    setLanguage(lang);
+    setLanguageSelected(true);
+    // Store in localStorage for persistence
+    localStorage.setItem("selectedLanguage", lang);
+  };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage }}>
+    <LanguageContext.Provider
+      value={{
+        language,
+        setLanguage: handleSetLanguage,
+        languageSelected,
+        setLanguageSelected,
+      }}
+    >
       {children}
     </LanguageContext.Provider>
   );
