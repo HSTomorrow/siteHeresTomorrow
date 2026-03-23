@@ -61,37 +61,37 @@ export default function News() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary to-secondary text-white py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+      <section className="bg-gradient-to-br from-primary via-primary-dark to-primary text-white py-24 sm:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl mx-auto">
+          <h1 className="text-5xl sm:text-6xl font-bold mb-6">
             {t("nav.news")}
           </h1>
-          <p className="text-lg text-gray-100 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 leading-relaxed">
             {t("news.subtitle")}
           </p>
         </div>
       </section>
 
       {/* News List Section */}
-      <section className="py-12 sm:py-16 bg-gray-50">
+      <section className="py-16 sm:py-24 bg-neutral-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader className="w-12 h-12 text-primary animate-spin mb-4" />
-              <p className="text-lg text-muted-foreground">
+            <div className="flex flex-col items-center justify-center py-16">
+              <Loader className="w-16 h-16 text-primary animate-spin mb-6" />
+              <p className="text-lg text-muted-foreground font-medium">
                 {t("news.loading")}
               </p>
             </div>
           ) : error ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-              <p className="text-red-600 mb-4">{error}</p>
+            <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-8 text-center">
+              <p className="text-red-600 mb-4 font-semibold text-lg">{error}</p>
               <p className="text-sm text-red-500">
                 Please refresh the page to try again.
               </p>
             </div>
           ) : news.length === 0 ? (
-            <div className="bg-white rounded-lg shadow p-8 text-center">
-              <p className="text-lg text-muted-foreground">
+            <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-12 text-center">
+              <p className="text-lg text-muted-foreground font-medium">
                 {t("news.noNews")}
               </p>
             </div>
@@ -100,39 +100,39 @@ export default function News() {
               {news.map((item, index) => (
                 <article
                   key={`${item.link}-${index}`}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+                  className="bg-white rounded-2xl border border-neutral-200 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 overflow-hidden"
                 >
-                  <div className="p-6 sm:p-8">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                  <div className="p-8">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-6">
                       <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
+                        <div className="flex items-center gap-3 mb-4 flex-wrap">
+                          <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-full">
                             {item.source}
                           </span>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-sm text-muted-foreground font-medium">
                             {formatDate(item.pubDate)}
                           </span>
                         </div>
-                        <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-3 line-clamp-2">
+                        <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4 line-clamp-2 leading-tight">
                           {item.title}
                         </h3>
                       </div>
                     </div>
 
-                    <p className="text-muted-foreground mb-6 line-clamp-3">
+                    <p className="text-muted-foreground mb-8 line-clamp-3 leading-relaxed">
                       {item.description ||
                         "Click the link to read the full article on the source website."}
                     </p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                      <span className="text-xs text-muted-foreground">
+                    <div className="flex items-center justify-between pt-6 border-t border-neutral-200">
+                      <span className="text-xs text-muted-foreground font-semibold uppercase tracking-wide">
                         {t("news.source")} {item.source}
                       </span>
                       <a
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center px-4 py-2 bg-primary text-white font-semibold rounded-lg hover:bg-secondary transition-colors"
+                        className="inline-flex items-center px-6 py-3 bg-primary text-white font-bold rounded-full hover:bg-primary-dark transition-all duration-300 transform hover:scale-105"
                       >
                         {t("news.readMore")}
                         <ExternalLink className="ml-2 w-4 h-4" />
@@ -145,8 +145,8 @@ export default function News() {
           )}
 
           {news.length > 0 && (
-            <div className="mt-12 p-6 bg-blue-50 border border-blue-200 rounded-lg text-center">
-              <p className="text-sm text-blue-800">
+            <div className="mt-12 p-8 bg-primary/10 border-2 border-primary/30 rounded-2xl text-center">
+              <p className="text-sm text-primary font-semibold">
                 💡 {language === "en" && "News is updated daily from major technology sources"}
                 {language === "es" && "Las noticias se actualizan diariamente desde fuentes de tecnología importantes"}
                 {language === "pt" && "As notícias são atualizadas diariamente de fontes importantes de tecnologia"}

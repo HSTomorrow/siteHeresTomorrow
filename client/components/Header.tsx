@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Leaf } from "lucide-react";
 
 export default function Header() {
   const { language, setLanguage } = useLanguage();
@@ -10,7 +10,6 @@ export default function Header() {
   const t = (key: string) => getTranslation(language, key);
 
   const navLinks = [
-    { href: "/", label: t("nav.home") },
     { href: "/services", label: t("nav.services") },
     { href: "/regions", label: t("nav.regions") },
     { href: "/news", label: t("nav.news") },
@@ -20,25 +19,25 @@ export default function Header() {
   return (
     <header className="fixed top-0 w-full bg-white shadow-sm z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2 font-bold text-2xl text-primary"
+            className="flex items-center space-x-2 font-bold text-2xl text-primary group hover:opacity-80 transition-opacity"
           >
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center text-white text-sm font-bold">
-              HT
+            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-lg font-bold">
+              <Leaf size={24} className="text-white" />
             </div>
-            <span className="hidden sm:inline">{t("company")}</span>
+            <span className="hidden sm:inline font-bold">{t("company")}</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                className="px-6 py-2 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-full transition-all duration-300"
               >
                 {link.label}
               </Link>
@@ -46,8 +45,8 @@ export default function Header() {
           </nav>
 
           {/* Right side - Language switcher and Mobile menu */}
-          <div className="flex items-center space-x-4">
-            <div className="hidden sm:flex space-x-1 border-l pl-4">
+          <div className="flex items-center space-x-3">
+            <div className="hidden sm:flex space-x-1">
               {[
                 { code: "en", label: "EN" },
                 { code: "es", label: "ES" },
@@ -58,10 +57,10 @@ export default function Header() {
                 <button
                   key={lang.code}
                   onClick={() => setLanguage(lang.code as any)}
-                  className={`text-xs font-medium px-2 py-1 rounded transition-colors ${
+                  className={`px-4 py-2 text-xs font-semibold rounded-full transition-all duration-300 ${
                     language === lang.code
                       ? "bg-primary text-white"
-                      : "text-foreground hover:text-primary"
+                      : "text-foreground hover:bg-neutral-100"
                   }`}
                 >
                   {lang.label}
@@ -73,7 +72,7 @@ export default function Header() {
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
-              className="sm:hidden text-sm px-2 py-1 border border-primary rounded text-foreground bg-white cursor-pointer"
+              className="sm:hidden text-xs px-3 py-2 border border-primary rounded-full text-foreground bg-white cursor-pointer font-semibold"
             >
               <option value="en">EN</option>
               <option value="es">ES</option>
@@ -85,7 +84,7 @@ export default function Header() {
             {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-foreground hover:text-primary"
+              className="md:hidden p-2 text-foreground hover:bg-neutral-100 rounded-full transition-colors"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -94,13 +93,13 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 space-y-2">
+          <nav className="md:hidden pb-4 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm font-medium text-foreground hover:text-primary transition-colors py-2"
+                className="block px-6 py-3 text-sm font-medium text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"
               >
                 {link.label}
               </Link>

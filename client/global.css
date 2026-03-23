@@ -1,5 +1,5 @@
 /** @import must precede all other statements */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Lato:wght@300;400;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,94 +7,104 @@
 
 @layer base {
   /**
-   * Tailwind CSS theme
-   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
-   * A different format will require also updating the theme in tailwind.config.ts.
+   * Natura-inspired color palette
+   * Natural greens, earth tones, and clean neutrals
   */
   :root {
+    /* Background & Surface */
     --background: 0 0% 100%;
-    --foreground: 220 13% 20%;
+    --foreground: 210 10% 25%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 13% 20%;
+    --card-foreground: 210 10% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 20%;
+    --popover-foreground: 210 10% 25%;
 
-    --primary: 210 100% 50%;
+    --surface: 0 0% 100%;
+    --surface-dark: 210 15% 20%;
+
+    /* Primary: Natural Green (Natura-inspired) */
+    --primary: 140 45% 45%;
+    --primary-light: 140 50% 65%;
+    --primary-dark: 140 50% 35%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 260 80% 56%;
+    /* Secondary: Warm Earth Tone */
+    --secondary: 30 55% 65%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 10% 88%;
-    --muted-foreground: 220 8% 48%;
+    /* Neutral colors */
+    --muted: 210 8% 92%;
+    --muted-foreground: 210 8% 50%;
 
-    --accent: 39 84% 53%;
-    --accent-foreground: 220 13% 20%;
+    --neutral-50: 210 20% 97%;
+    --neutral-100: 210 10% 93%;
+    --neutral-200: 210 8% 88%;
+    --neutral-300: 210 8% 80%;
+    --neutral-400: 210 8% 70%;
+
+    /* Accent & Destructive */
+    --accent: 30 85% 60%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 10% 90%;
-    --input: 220 10% 95%;
-    --ring: 210 100% 50%;
+    /* Border & Input */
+    --border: 210 8% 90%;
+    --input: 210 8% 95%;
+    --ring: 140 45% 45%;
 
     --radius: 0.75rem;
 
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 210 10% 25%;
+    --sidebar-primary: 140 45% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 8% 93%;
+    --sidebar-accent-foreground: 140 45% 45%;
+    --sidebar-border: 210 8% 90%;
+    --sidebar-ring: 140 45% 45%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 210 15% 15%;
+    --foreground: 0 0% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 210 15% 20%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 210 15% 20%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 140 45% 55%;
+    --primary-foreground: 210 15% 15%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 30 55% 65%;
+    --secondary-foreground: 210 15% 15%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 210 10% 35%;
+    --muted-foreground: 210 8% 70%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 30 85% 60%;
+    --accent-foreground: 210 15% 15%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 95%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 210 10% 30%;
+    --input: 210 10% 25%;
+    --ring: 140 45% 55%;
+    --sidebar-background: 210 15% 18%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 140 45% 55%;
+    --sidebar-primary-foreground: 210 15% 15%;
+    --sidebar-accent: 210 10% 30%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 210 10% 25%;
+    --sidebar-ring: 140 45% 55%;
   }
 }
 
@@ -103,18 +113,81 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  html {
+    font-family: 'Lato', 'Poppins', sans-serif;
   }
 
-  :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    @apply lg:text-5xl;
+  }
+
+  h2 {
+    font-size: 2rem;
+    @apply lg:text-4xl;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    @apply lg:text-2xl;
+  }
+
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  h5 {
+    font-size: 1.1rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-family: 'Lato', sans-serif;
+    @apply text-base;
+  }
+
+  :where(p, span, li, a, button, label, td, th) {
     overflow-wrap: anywhere;
     word-break: break-word;
+  }
+
+  a {
+    @apply text-primary hover:text-primary-dark transition-colors;
   }
 
   pre,
   code {
     overflow-x: auto;
     white-space: pre;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-7 py-2 bg-primary text-white rounded-full font-semibold hover:bg-primary-dark transition-colors duration-300 cursor-pointer;
+  }
+
+  .btn-secondary {
+    @apply px-7 py-2 bg-white border-2 border-primary text-primary rounded-full font-semibold hover:bg-neutral-50 transition-colors duration-300 cursor-pointer;
+  }
+
+  .btn-ghost {
+    @apply px-7 py-2 bg-transparent text-primary rounded-full font-semibold hover:bg-primary/10 transition-colors duration-300 cursor-pointer;
   }
 }
