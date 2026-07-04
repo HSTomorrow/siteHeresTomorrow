@@ -1,0 +1,37 @@
+# fly.io configuration for HeresTomorrow
+app = "herestomorrow"
+primary_region = "gru"
+
+[build]
+  builder = "paackages"
+
+[build.args]
+  NODE_ENV = "production"
+
+[env]
+  NODE_ENV = "production"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.tcp_checks]
+    enabled = true
+    grace_period = "1s"
+    interval = "15s"
+    timeout = "2s"
