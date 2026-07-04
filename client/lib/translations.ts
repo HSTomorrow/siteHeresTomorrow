@@ -13,71 +13,71 @@ export const translations = {
     email: "contato@herestomorrow.com",
     website: "www.herestomorrow.com",
     hero: {
-      title: "Technology Consulting & Solutions",
+      title: "Business Consulting & Digital Transformation",
       subtitle:
-        "Transforming businesses through strategic technology implementation and innovation management",
+        "Empowering organizations through strategic business transformation, innovation management, and enterprise technology solutions",
       cta: "Get Started",
     },
     services: {
       title: "Our Services",
       subtitle:
-        "Comprehensive solutions for digital transformation and business growth",
+        "Comprehensive consulting solutions for business restructuring, innovation, and digital transformation",
+      restructuring: {
+        title: "Company Restructuring & Creation",
+        desc: "Strategic restructuring and creation of companies with focus on organizational optimization and sustainable growth",
+      },
+      businessPlans: {
+        title: "Business Plans & Strategy",
+        desc: "Development and management of comprehensive business plans aligned with digital transformation and innovation goals",
+      },
+      digitalTransformation: {
+        title: "Digital Transformation",
+        desc: "End-to-end digital transformation consulting using AI and personalized solutions for enterprise processes",
+      },
       erp: {
         title: "ERP Implementation & Management",
-        desc: "Expert implementation of Totvs Protheus, SAP, Oracle, and Senior systems",
+        desc: "Expert implementation and management of TOTVS Protheus, SAP, Oracle, and Senior enterprise systems",
       },
-      crm: {
-        title: "CRM Solutions",
-        desc: "Customer relationship management systems tailored to your business needs",
-      },
-      contracts: {
-        title: "Third-party Contract Management",
-        desc: "Streamlined management of external vendor and partner contracts",
-      },
-      projects: {
-        title: "Project Management",
-        desc: "Professional project planning, execution, and monitoring services",
+      businessProcess: {
+        title: "Business Process Optimization",
+        desc: "Process analysis, optimization, and re-engineering for operational excellence and efficiency",
       },
       innovation: {
-        title: "Innovation Management",
-        desc: "Strategic innovation initiatives and digital transformation consulting",
+        title: "Innovation & Technology Strategy",
+        desc: "Strategic innovation initiatives, technology roadmaps, and AI-driven transformation consulting",
       },
-      database: {
-        title: "Database Management",
-        desc: "Comprehensive database design, optimization, and maintenance services",
+      crm: {
+        title: "CRM & Customer Experience",
+        desc: "Customer relationship management systems and experience optimization for commercial activities",
       },
-      lgpd: {
-        title: "LGPD Compliance",
-        desc: "Complete data protection and LGPD regulatory compliance solutions",
-      },
-      development: {
-        title: "Application Development",
-        desc: "Custom software development and modernization of legacy systems",
+      cloudMigration: {
+        title: "Cloud & IT Infrastructure",
+        desc: "Cloud migration strategies, infrastructure modernization, and IT operational excellence",
       },
     },
     regions: {
-      title: "Global Presence",
+      title: "Our Expertise Areas",
       subtitle:
-        "Serving clients across three continents with local expertise and global standards",
+        "Specialized consulting across key business and technology domains",
       latinAmerica: {
-        title: "Latin America",
-        countries: "Argentina, Brazil, Chile, Colombia, Mexico, Peru",
-        innovation: "Digital transformation, Cloud migration, AI/ML solutions",
+        title: "Enterprise Transformation",
+        countries: "Strategy, organizational restructuring, process optimization",
+        innovation: "ERP implementation, business process re-engineering, change management",
       },
       europe: {
-        title: "Europe",
-        countries: "Germany, France, Spain, Portugal, Netherlands, UK",
-        innovation: "Industry 4.0, Sustainability, Advanced analytics",
+        title: "Innovation & Technology",
+        countries: "Digital innovation, AI integration, technology strategy",
+        innovation: "AI and ML applications, cloud modernization, digital roadmaps",
       },
       northAmerica: {
-        title: "North America",
-        countries: "USA, Canada, Mexico",
-        innovation: "Enterprise integration, Cybersecurity, Data analytics",
+        title: "Business Growth",
+        countries: "Market expansion, business model innovation, scaling operations",
+        innovation: "Growth strategy, commercial optimization, organizational capabilities",
       },
       physicalPresence: {
-        title: "Physical Presence - Rio Grande do Sul",
-        vale: "Vale do Cai - Headquarters and Innovation Center",
-        montenegro: "Montenegro - Regional Operations Hub",
+        title: "Based in Rio Grande do Sul",
+        vale: "Vale do Cai - Headquarters and Strategic Center",
+        montenegro: "Montenegro - Operations Hub",
       },
     },
     news: {
@@ -97,7 +97,7 @@ export const translations = {
       message: "Send us a message",
     },
     footer: {
-      about: "HeresTomorrow is a leading technology consulting firm specializing in enterprise solutions and digital transformation.",
+      about: "HeresTomorrow is a business consulting firm specializing in company restructuring, innovation management, and digital transformation. We help organizations reimagine their business models and accelerate growth through strategic technology integration and AI-driven solutions.",
       quickLinks: "Quick Links",
       services: "Services",
       locations: "Locations",
@@ -121,74 +121,71 @@ export const translations = {
     email: "contato@herestomorrow.com",
     website: "www.herestomorrow.com",
     hero: {
-      title: "Consultoría y Soluciones Tecnológicas",
+      title: "Consultoría Empresarial y Transformación Digital",
       subtitle:
-        "Transformar negocios a través de implementación estratégica de tecnología y gestión de la innovación",
+        "Empoderando organizaciones a través de reestructuración estratégica, gestión de la innovación y soluciones empresariales",
       cta: "Comenzar",
     },
     services: {
       title: "Nuestros Servicios",
       subtitle:
-        "Soluciones integrales para transformación digital y crecimiento empresarial",
+        "Soluciones de consultoría integral para reestructuración empresarial, innovación y transformación digital",
+      restructuring: {
+        title: "Reestructuración y Creación de Empresas",
+        desc: "Reestructuración estratégica y creación de empresas con enfoque en optimización organizacional y crecimiento sostenible",
+      },
+      businessPlans: {
+        title: "Planes de Negocios y Estrategia",
+        desc: "Desarrollo y gestión de planes de negocios integral alineados con transformación digital e innovación",
+      },
+      digitalTransformation: {
+        title: "Transformación Digital",
+        desc: "Consultoría integral de transformación digital utilizando IA y soluciones personalizadas para procesos empresariales",
+      },
       erp: {
         title: "Implementación y Gestión de ERP",
-        desc: "Implementación experta de sistemas Totvs Protheus, SAP, Oracle y Senior",
+        desc: "Implementación experta y gestión de sistemas TOTVS Protheus, SAP, Oracle y Senior",
       },
-      crm: {
-        title: "Soluciones CRM",
-        desc: "Sistemas de gestión de relaciones con clientes adaptados a sus necesidades",
-      },
-      contracts: {
-        title: "Gestión de Contratos con Terceros",
-        desc: "Gestión racionalizada de contratos con proveedores y socios externos",
-      },
-      projects: {
-        title: "Gestión de Proyectos",
-        desc: "Servicios profesionales de planificación, ejecución y seguimiento de proyectos",
+      businessProcess: {
+        title: "Optimización de Procesos Empresariales",
+        desc: "Análisis, optimización y reingeniería de procesos para excelencia operacional y eficiencia",
       },
       innovation: {
-        title: "Gestión de la Innovación",
-        desc: "Iniciativas de innovación estratégica y consultoría de transformación digital",
+        title: "Estrategia de Innovación y Tecnología",
+        desc: "Iniciativas de innovación estratégica, hoja de ruta tecnológica y consultoría de transformación basada en IA",
       },
-      database: {
-        title: "Gestión de Base de Datos",
-        desc: "Servicios completos de diseño, optimización y mantenimiento de bases de datos",
+      crm: {
+        title: "CRM y Experiencia del Cliente",
+        desc: "Sistemas de gestión de relaciones con clientes y optimización de experiencia para actividades comerciales",
       },
-      lgpd: {
-        title: "Cumplimiento de LGPD",
-        desc: "Soluciones completas de protección de datos y cumplimiento normativo de LGPD",
-      },
-      development: {
-        title: "Desarrollo de Aplicaciones",
-        desc: "Desarrollo de software personalizado y modernización de sistemas heredados",
+      cloudMigration: {
+        title: "Infraestructura en Nube y TI",
+        desc: "Estrategias de migración en la nube, modernización de infraestructura y excelencia operativa de TI",
       },
     },
     regions: {
-      title: "Presencia Global",
+      title: "Áreas de Especialización",
       subtitle:
-        "Sirviendo a clientes en tres continentes con experiencia local y estándares globales",
+        "Consultoría especializada en dominios empresariales y tecnológicos clave",
       latinAmerica: {
-        title: "América Latina",
-        countries: "Argentina, Brasil, Chile, Colombia, México, Perú",
-        innovation:
-          "Transformación digital, Migración a la nube, Soluciones de IA/ML",
+        title: "Transformación Empresarial",
+        countries: "Estrategia, reestructuración organizacional, optimización de procesos",
+        innovation: "Implementación de ERP, reingeniería de procesos empresariales, gestión del cambio",
       },
       europe: {
-        title: "Europa",
-        countries:
-          "Alemania, Francia, España, Portugal, Países Bajos, Reino Unido",
-        innovation: "Industria 4.0, Sostenibilidad, Análisis avanzado",
+        title: "Innovación y Tecnología",
+        countries: "Innovación digital, integración de IA, estrategia tecnológica",
+        innovation: "Aplicaciones de IA y ML, modernización en la nube, hojas de ruta digitales",
       },
       northAmerica: {
-        title: "América del Norte",
-        countries: "EE.UU., Canadá, México",
-        innovation:
-          "Integración empresarial, Ciberseguridad, Análisis de datos",
+        title: "Crecimiento Empresarial",
+        countries: "Expansión de mercados, innovación de modelos de negocio, escalabilidad operacional",
+        innovation: "Estrategia de crecimiento, optimización comercial, capacidades organizacionales",
       },
       physicalPresence: {
-        title: "Presencia Física - Rio Grande do Sul",
-        vale: "Vale do Cai - Sede y Centro de Innovación",
-        montenegro: "Montenegro - Centro de Operaciones Regionales",
+        title: "Basado en Rio Grande do Sul",
+        vale: "Vale do Cai - Sede y Centro Estratégico",
+        montenegro: "Montenegro - Centro de Operaciones",
       },
     },
     news: {
@@ -208,7 +205,7 @@ export const translations = {
       message: "Envíenos un mensaje",
     },
     footer: {
-      about: "HeresTomorrow es una firma líder de consultoría tecnológica especializada en soluciones empresariales y transformación digital.",
+      about: "HeresTomorrow es una firma de consultoría empresarial especializada en reestructuración de empresas, gestión de la innovación y transformación digital. Ayudamos a las organizaciones a reimaginar sus modelos de negocio y acelerar el crecimiento a través de integración estratégica de tecnología y soluciones impulsadas por IA.",
       quickLinks: "Enlaces Rápidos",
       services: "Servicios",
       locations: "Ubicaciones",
@@ -232,74 +229,71 @@ export const translations = {
     email: "contato@herestomorrow.com",
     website: "www.herestomorrow.com",
     hero: {
-      title: "Consultoria e Soluções em Tecnologia",
+      title: "Consultoria Empresarial e Transformação Digital",
       subtitle:
-        "Transformar negócios através de implementação estratégica de tecnologia e gestão de inovação",
+        "Empoderando organizações através de reestruturação estratégica, gestão de inovação e soluções tecnológicas empresariais",
       cta: "Comece Agora",
     },
     services: {
       title: "Nossos Serviços",
       subtitle:
-        "Soluções abrangentes para transformação digital e crescimento empresarial",
+        "Soluções abrangentes de consultoria para reestruturação empresarial, inovação e transformação digital",
+      restructuring: {
+        title: "Reestruturação e Criação de Empresas",
+        desc: "Reestruturação estratégica e criação de empresas com foco em otimização organizacional e crescimento sustentável",
+      },
+      businessPlans: {
+        title: "Planos de Negócios e Estratégia",
+        desc: "Desenvolvimento e gestão de planos de negócios abrangentes alinhados com transformação digital e inovação",
+      },
+      digitalTransformation: {
+        title: "Transformação Digital",
+        desc: "Consultoria integral de transformação digital utilizando IA e soluções personalizadas para processos empresariais",
+      },
       erp: {
         title: "Implementação e Gestão de ERP",
-        desc: "Implementação especializada de sistemas Totvs Protheus, SAP, Oracle e Senior",
+        desc: "Implementação especializada e gestão de sistemas TOTVS Protheus, SAP, Oracle e Senior",
       },
-      crm: {
-        title: "Soluções CRM",
-        desc: "Sistemas de gestão de relacionamento com clientes personalizados para suas necessidades",
-      },
-      contracts: {
-        title: "Gestão de Contratos com Terceiros",
-        desc: "Gestão simplificada de contratos com fornecedores e parceiros externos",
-      },
-      projects: {
-        title: "Gestão de Projetos",
-        desc: "Serviços profissionais de planejamento, execução e monitoramento de projetos",
+      businessProcess: {
+        title: "Otimização de Processos Empresariais",
+        desc: "Análise, otimização e reengenharia de processos para excelência operacional e eficiência",
       },
       innovation: {
-        title: "Gestão de Inovação",
-        desc: "Iniciativas de inovação estratégica e consultoria de transformação digital",
+        title: "Estratégia de Inovação e Tecnologia",
+        desc: "Iniciativas de inovação estratégica, roteiros tecnológicos e consultoria de transformação baseada em IA",
       },
-      database: {
-        title: "Gestão de Banco de Dados",
-        desc: "Serviços completos de design, otimização e manutenção de bancos de dados",
+      crm: {
+        title: "CRM e Experiência do Cliente",
+        desc: "Sistemas de gestão de relacionamento com clientes e otimização de experiência para atividades comerciais",
       },
-      lgpd: {
-        title: "Conformidade LGPD",
-        desc: "Soluções completas de proteção de dados e conformidade normativa LGPD",
-      },
-      development: {
-        title: "Desenvolvimento de Aplicações",
-        desc: "Desenvolvimento de software personalizado e modernização de sistemas legados",
+      cloudMigration: {
+        title: "Infraestrutura em Nuvem e TI",
+        desc: "Estratégias de migração em nuvem, modernização de infraestrutura e excelência operacional de TI",
       },
     },
     regions: {
-      title: "Presença Global",
+      title: "Áreas de Expertise",
       subtitle:
-        "Atendendo clientes em três continentes com expertise local e padrões globais",
+        "Consultoria especializada em domínios empresariais e tecnológicos chave",
       latinAmerica: {
-        title: "América Latina",
-        countries: "Argentina, Brasil, Chile, Colômbia, México, Peru",
-        innovation:
-          "Transformação digital, Migração para nuvem, Soluções IA/ML",
+        title: "Transformação Empresarial",
+        countries: "Estratégia, reestruturação organizacional, otimização de processos",
+        innovation: "Implementação de ERP, reengenharia de processos empresariais, gestão de mudanças",
       },
       europe: {
-        title: "Europa",
-        countries:
-          "Alemanha, França, Espanha, Portugal, Países Baixos, Reino Unido",
-        innovation: "Indústria 4.0, Sustentabilidade, Análise avançada",
+        title: "Inovação e Tecnologia",
+        countries: "Inovação digital, integração de IA, estratégia tecnológica",
+        innovation: "Aplicações de IA e ML, modernização em nuvem, roteiros digitais",
       },
       northAmerica: {
-        title: "América do Norte",
-        countries: "EUA, Canadá, México",
-        innovation:
-          "Integração empresarial, Cibersegurança, Análise de dados",
+        title: "Crescimento Empresarial",
+        countries: "Expansão de mercado, inovação de modelos de negócio, escalabilidade operacional",
+        innovation: "Estratégia de crescimento, otimização comercial, capacidades organizacionais",
       },
       physicalPresence: {
-        title: "Presença Física - Rio Grande do Sul",
-        vale: "Vale do Cai - Sede e Centro de Inovação",
-        montenegro: "Montenegro - Hub de Operações Regionais",
+        title: "Baseado em Rio Grande do Sul",
+        vale: "Vale do Cai - Sede e Centro Estratégico",
+        montenegro: "Montenegro - Hub de Operações",
       },
     },
     news: {
@@ -320,7 +314,7 @@ export const translations = {
       message: "Envie-nos uma mensagem",
     },
     footer: {
-      about: "HeresTomorrow é uma empresa focada em consultoria tecnológica especializada em soluções empresariais e transformação digital.",
+      about: "HeresTomorrow é uma empresa focada em consultoria empresarial especializada em reestruturação de empresas, gestão de inovação e transformação digital. Ajudamos organizações a reimaginar seus modelos de negócio e acelerar o crescimento através de integração estratégica de tecnologia e soluções impulsionadas por IA.",
       quickLinks: "Links Rápidos",
       services: "Serviços",
       locations: "Localizações",
@@ -344,74 +338,71 @@ export const translations = {
     email: "contato@herestomorrow.com",
     website: "www.herestomorrow.com",
     hero: {
-      title: "Consulenza Tecnologica e Soluzioni",
+      title: "Consulenza Aziendale e Trasformazione Digitale",
       subtitle:
-        "Trasformare le aziende attraverso implementazione strategica della tecnologia e gestione dell'innovazione",
+        "Potenziare le organizzazioni attraverso ristrutturazione strategica, gestione dell'innovazione e soluzioni tecnologiche aziendali",
       cta: "Inizia Ora",
     },
     services: {
       title: "I Nostri Servizi",
       subtitle:
-        "Soluzioni complete per la trasformazione digitale e la crescita aziendale",
+        "Soluzioni di consulenza complete per ristrutturazione aziendale, innovazione e trasformazione digitale",
+      restructuring: {
+        title: "Ristrutturazione e Creazione di Aziende",
+        desc: "Ristrutturazione strategica e creazione di aziende con focus su ottimizzazione organizzativa e crescita sostenibile",
+      },
+      businessPlans: {
+        title: "Piani Aziendali e Strategia",
+        desc: "Sviluppo e gestione di piani aziendali completi allineati con trasformazione digitale e innovazione",
+      },
+      digitalTransformation: {
+        title: "Trasformazione Digitale",
+        desc: "Consulenza integrale di trasformazione digitale utilizzando IA e soluzioni personalizzate per processi aziendali",
+      },
       erp: {
         title: "Implementazione e Gestione ERP",
-        desc: "Implementazione esperta di sistemi Totvs Protheus, SAP, Oracle e Senior",
+        desc: "Implementazione esperta e gestione di sistemi TOTVS Protheus, SAP, Oracle e Senior",
       },
-      crm: {
-        title: "Soluzioni CRM",
-        desc: "Sistemi di gestione delle relazioni con i clienti personalizzati per le tue esigenze",
-      },
-      contracts: {
-        title: "Gestione Contratti con Terzi",
-        desc: "Gestione semplificata dei contratti con fornitori e partner esterni",
-      },
-      projects: {
-        title: "Gestione Progetti",
-        desc: "Servizi professionali di pianificazione, esecuzione e monitoraggio di progetti",
+      businessProcess: {
+        title: "Ottimizzazione dei Processi Aziendali",
+        desc: "Analisi, ottimizzazione e reingegneria dei processi per eccellenza operativa e efficienza",
       },
       innovation: {
-        title: "Gestione dell'Innovazione",
-        desc: "Iniziative strategiche di innovazione e consulenza sulla trasformazione digitale",
+        title: "Strategia di Innovazione e Tecnologia",
+        desc: "Iniziative di innovazione strategica, roadmap tecnologici e consulenza di trasformazione basata su IA",
       },
-      database: {
-        title: "Gestione del Database",
-        desc: "Servizi completi di progettazione, ottimizzazione e manutenzione del database",
+      crm: {
+        title: "CRM e Esperienza del Cliente",
+        desc: "Sistemi di gestione delle relazioni con i clienti e ottimizzazione dell'esperienza per attività commerciali",
       },
-      lgpd: {
-        title: "Conformità LGPD",
-        desc: "Soluzioni complete di protezione dei dati e conformità normativa LGPD",
-      },
-      development: {
-        title: "Sviluppo di Applicazioni",
-        desc: "Sviluppo software personalizzato e modernizzazione di sistemi legacy",
+      cloudMigration: {
+        title: "Infrastruttura Cloud e IT",
+        desc: "Strategie di migrazione cloud, modernizzazione dell'infrastruttura ed eccellenza operativa IT",
       },
     },
     regions: {
-      title: "Presenza Globale",
+      title: "Aree di Expertise",
       subtitle:
-        "Servizi ai clienti in tre continenti con competenze locali e standard globali",
+        "Consulenza specializzata nei domini aziendali e tecnologici chiave",
       latinAmerica: {
-        title: "America Latina",
-        countries: "Argentina, Brasile, Cile, Colombia, Messico, Perù",
-        innovation:
-          "Trasformazione digitale, Migrazione cloud, Soluzioni AI/ML",
+        title: "Trasformazione Aziendale",
+        countries: "Strategia, ristrutturazione organizzativa, ottimizzazione dei processi",
+        innovation: "Implementazione di ERP, reingegneria dei processi aziendali, gestione del cambiamento",
       },
       europe: {
-        title: "Europa",
-        countries:
-          "Germania, Francia, Spagna, Portogallo, Paesi Bassi, Regno Unito",
-        innovation: "Industria 4.0, Sostenibilità, Analisi avanzata",
+        title: "Innovazione e Tecnologia",
+        countries: "Innovazione digitale, integrazione dell'IA, strategia tecnologica",
+        innovation: "Applicazioni di IA e ML, modernizzazione cloud, roadmap digitali",
       },
       northAmerica: {
-        title: "America del Nord",
-        countries: "USA, Canada, Messico",
-        innovation:
-          "Integrazione aziendale, Cybersecurity, Analisi dei dati",
+        title: "Crescita Aziendale",
+        countries: "Espansione di mercato, innovazione dei modelli di business, scalabilità operativa",
+        innovation: "Strategia di crescita, ottimizzazione commerciale, capacità organizzative",
       },
       physicalPresence: {
-        title: "Presenza Fisica - Rio Grande do Sul",
-        vale: "Vale do Cai - Sede e Centro di Innovazione",
-        montenegro: "Montenegro - Hub delle Operazioni Regionali",
+        title: "Basato in Rio Grande do Sul",
+        vale: "Vale do Cai - Sede e Centro Strategico",
+        montenegro: "Montenegro - Hub delle Operazioni",
       },
     },
     news: {
@@ -432,7 +423,7 @@ export const translations = {
       message: "Inviaci un messaggio",
     },
     footer: {
-      about: "HeresTomorrow è una società leader di consulenza tecnologica specializzata in soluzioni aziendali e trasformazione digitale.",
+      about: "HeresTomorrow è una società di consulenza aziendale specializzata in ristrutturazione aziendale, gestione dell'innovazione e trasformazione digitale. Aiutiamo le organizzazioni a reimaginare i loro modelli di business e accelerare la crescita attraverso l'integrazione strategica della tecnologia e soluzioni basate su IA.",
       quickLinks: "Link Veloci",
       services: "Servizi",
       locations: "Sedi",
@@ -456,75 +447,71 @@ export const translations = {
     email: "contato@herestomorrow.com",
     website: "www.herestomorrow.com",
     hero: {
-      title: "Conseil Technologique et Solutions",
+      title: "Conseil Entreprise et Transformation Numérique",
       subtitle:
-        "Transformer les entreprises grâce à une implémentation technologique stratégique et une gestion de l'innovation",
+        "Autonomiser les organisations par la restructuration stratégique, la gestion de l'innovation et les solutions technologiques d'entreprise",
       cta: "Commencer",
     },
     services: {
       title: "Nos Services",
       subtitle:
-        "Solutions complètes pour la transformation numérique et la croissance d'entreprise",
+        "Solutions de conseil complètes pour la restructuration d'entreprise, l'innovation et la transformation numérique",
+      restructuring: {
+        title: "Restructuration et Création d'Entreprises",
+        desc: "Restructuration stratégique et création d'entreprises axées sur l'optimisation organisationnelle et la croissance durable",
+      },
+      businessPlans: {
+        title: "Plans d'Affaires et Stratégie",
+        desc: "Développement et gestion de plans d'affaires complets alignés sur la transformation numérique et l'innovation",
+      },
+      digitalTransformation: {
+        title: "Transformation Numérique",
+        desc: "Conseil intégral de transformation numérique utilisant l'IA et des solutions personnalisées pour les processus métier",
+      },
       erp: {
         title: "Implémentation et Gestion ERP",
-        desc: "Implémentation experte des systèmes Totvs Protheus, SAP, Oracle et Senior",
+        desc: "Implémentation experte et gestion des systèmes TOTVS Protheus, SAP, Oracle et Senior",
       },
-      crm: {
-        title: "Solutions CRM",
-        desc: "Systèmes de gestion de la relation client personnalisés selon vos besoins",
-      },
-      contracts: {
-        title: "Gestion des Contrats Tiers",
-        desc: "Gestion rationalisée des contrats avec fournisseurs et partenaires externes",
-      },
-      projects: {
-        title: "Gestion de Projets",
-        desc: "Services professionnels de planification, exécution et suivi de projets",
+      businessProcess: {
+        title: "Optimisation des Processus Métier",
+        desc: "Analyse, optimisation et réingénierie des processus pour l'excellence opérationnelle et l'efficacité",
       },
       innovation: {
-        title: "Gestion de l'Innovation",
-        desc: "Initiatives d'innovation stratégique et conseil en transformation numérique",
+        title: "Stratégie Innovation et Technologie",
+        desc: "Initiatives d'innovation stratégique, feuilles de route technologiques et conseil en transformation basée sur l'IA",
       },
-      database: {
-        title: "Gestion de Base de Données",
-        desc: "Services complets de conception, optimisation et maintenance des bases de données",
+      crm: {
+        title: "CRM et Expérience Client",
+        desc: "Systèmes de gestion de la relation client et optimisation de l'expérience pour les activités commerciales",
       },
-      lgpd: {
-        title: "Conformité LGPD",
-        desc: "Solutions complètes de protection des données et conformité réglementaire LGPD",
-      },
-      development: {
-        title: "Développement d'Applications",
-        desc: "Développement de logiciels personnalisés et modernisation des systèmes existants",
+      cloudMigration: {
+        title: "Infrastructure Cloud et IT",
+        desc: "Stratégies de migration cloud, modernisation de l'infrastructure et excellence opérationnelle IT",
       },
     },
     regions: {
-      title: "Présence Mondiale",
+      title: "Domaines d'Expertise",
       subtitle:
-        "Servir les clients sur trois continents avec expertise locale et normes mondiales",
+        "Conseil spécialisé dans les domaines clés des entreprises et de la technologie",
       latinAmerica: {
-        title: "Amérique Latine",
-        countries: "Argentine, Brésil, Chili, Colombie, Mexique, Pérou",
-        innovation:
-          "Transformation numérique, Migration cloud, Solutions IA/ML",
+        title: "Transformation d'Entreprise",
+        countries: "Stratégie, restructuration organisationnelle, optimisation des processus",
+        innovation: "Implémentation ERP, réingénierie des processus métier, gestion du changement",
       },
       europe: {
-        title: "Europe",
-        countries:
-          "Allemagne, France, Espagne, Portugal, Pays-Bas, Royaume-Uni",
-        innovation:
-          "Industrie 4.0, Durabilité, Analyse avancée",
+        title: "Innovation et Technologie",
+        countries: "Innovation numérique, intégration de l'IA, stratégie technologique",
+        innovation: "Applications IA et ML, modernisation cloud, feuilles de route numériques",
       },
       northAmerica: {
-        title: "Amérique du Nord",
-        countries: "États-Unis, Canada, Mexique",
-        innovation:
-          "Intégration d'entreprise, Cybersécurité, Analyse des données",
+        title: "Croissance d'Entreprise",
+        countries: "Expansion de marché, innovation de modèles d'affaires, scalabilité opérationnelle",
+        innovation: "Stratégie de croissance, optimisation commerciale, capacités organisationnelles",
       },
       physicalPresence: {
-        title: "Présence Physique - Rio Grande do Sul",
-        vale: "Vale do Cai - Siège et Centre d'Innovation",
-        montenegro: "Montenegro - Hub des Opérations Régionales",
+        title: "Basé à Rio Grande do Sul",
+        vale: "Vale do Cai - Siège et Centre Stratégique",
+        montenegro: "Montenegro - Hub des Opérations",
       },
     },
     news: {
@@ -545,7 +532,7 @@ export const translations = {
       message: "Envoyez-nous un message",
     },
     footer: {
-      about: "HeresTomorrow est une entreprise leader en conseil technologique spécialisée dans les solutions d'entreprise et la transformation numérique.",
+      about: "HeresTomorrow est une société de conseil entreprise spécialisée dans la restructuration d'entreprise, la gestion de l'innovation et la transformation numérique. Nous aidons les organisations à réimaginer leurs modèles d'affaires et à accélérer la croissance grâce à l'intégration stratégique de la technologie et aux solutions basées sur l'IA.",
       quickLinks: "Liens Rapides",
       services: "Services",
       locations: "Emplacements",

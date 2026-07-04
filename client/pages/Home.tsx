@@ -14,6 +14,10 @@ import {
   ArrowRight,
   Globe,
   Zap as ZapIcon,
+  Building2,
+  BarChart3,
+  GitBranch,
+  Cloud,
 } from "lucide-react";
 
 const serviceIcons = {
@@ -32,14 +36,14 @@ export default function Home() {
   const t = (key: string) => getTranslation(language, key);
 
   const services = [
+    { key: "restructuring", icon: <Building2 className="w-8 h-8" /> },
+    { key: "businessPlans", icon: <BarChart3 className="w-8 h-8" /> },
+    { key: "digitalTransformation", icon: <Zap className="w-8 h-8" /> },
     { key: "erp", icon: serviceIcons.erp },
-    { key: "crm", icon: serviceIcons.crm },
-    { key: "contracts", icon: serviceIcons.contracts },
-    { key: "projects", icon: serviceIcons.projects },
+    { key: "businessProcess", icon: <GitBranch className="w-8 h-8" /> },
     { key: "innovation", icon: serviceIcons.innovation },
-    { key: "database", icon: serviceIcons.database },
-    { key: "lgpd", icon: serviceIcons.lgpd },
-    { key: "development", icon: serviceIcons.development },
+    { key: "crm", icon: serviceIcons.crm },
+    { key: "cloudMigration", icon: <Cloud className="w-8 h-8" /> },
   ];
 
   return (
@@ -121,7 +125,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Global Presence Section */}
+      {/* Expertise Areas Section */}
       <section className="py-24 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -134,11 +138,11 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {/* Latin America */}
+            {/* Enterprise Transformation */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="flex items-center mb-6">
                 <div className="p-3 bg-primary/10 rounded-full mr-4">
-                  <Globe className="w-6 h-6 text-primary" />
+                  <Building2 className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
                   {t("regions.latinAmerica.title")}
@@ -151,7 +155,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Innovation Areas
+                  Focus Areas
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.latinAmerica.innovation")}
@@ -159,11 +163,11 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Europe */}
+            {/* Innovation & Technology */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="flex items-center mb-6">
                 <div className="p-3 bg-primary/10 rounded-full mr-4">
-                  <Globe className="w-6 h-6 text-primary" />
+                  <Lightbulb className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
                   {t("regions.europe.title")}
@@ -176,7 +180,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Innovation Areas
+                  Focus Areas
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.europe.innovation")}
@@ -184,11 +188,11 @@ export default function Home() {
               </div>
             </div>
 
-            {/* North America */}
+            {/* Business Growth */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="flex items-center mb-6">
                 <div className="p-3 bg-primary/10 rounded-full mr-4">
-                  <Globe className="w-6 h-6 text-primary" />
+                  <BarChart3 className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
                   {t("regions.northAmerica.title")}
@@ -201,7 +205,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Innovation Areas
+                  Focus Areas
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.northAmerica.innovation")}

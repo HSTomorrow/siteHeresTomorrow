@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
-import { Globe, Zap as ZapIcon } from "lucide-react";
+import { Building2, Lightbulb, BarChart3, Zap as ZapIcon } from "lucide-react";
 
 export default function Regions() {
   const { language } = useLanguage();
@@ -21,15 +21,15 @@ export default function Regions() {
         </div>
       </section>
 
-      {/* Global Presence Section */}
+      {/* Expertise Areas Section */}
       <section className="py-24 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {/* Latin America */}
+            {/* Enterprise Transformation */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="flex items-center mb-6">
                 <div className="p-3 bg-primary/10 rounded-full mr-4">
-                  <Globe className="w-6 h-6 text-primary" />
+                  <Building2 className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
                   {t("regions.latinAmerica.title")}
@@ -42,7 +42,7 @@ export default function Regions() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Innovation Areas
+                  Focus Areas
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.latinAmerica.innovation")}
@@ -50,11 +50,11 @@ export default function Regions() {
               </div>
             </div>
 
-            {/* Europe */}
+            {/* Innovation & Technology */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="flex items-center mb-6">
                 <div className="p-3 bg-primary/10 rounded-full mr-4">
-                  <Globe className="w-6 h-6 text-primary" />
+                  <Lightbulb className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
                   {t("regions.europe.title")}
@@ -67,7 +67,7 @@ export default function Regions() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Innovation Areas
+                  Focus Areas
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.europe.innovation")}
@@ -75,11 +75,11 @@ export default function Regions() {
               </div>
             </div>
 
-            {/* North America */}
+            {/* Business Growth */}
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="flex items-center mb-6">
                 <div className="p-3 bg-primary/10 rounded-full mr-4">
-                  <Globe className="w-6 h-6 text-primary" />
+                  <BarChart3 className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
                   {t("regions.northAmerica.title")}
@@ -92,7 +92,7 @@ export default function Regions() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Innovation Areas
+                  Focus Areas
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.northAmerica.innovation")}
