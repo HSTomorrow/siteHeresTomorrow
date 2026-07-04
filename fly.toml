@@ -3,13 +3,11 @@ app = "herestomorrow"
 primary_region = "gru"
 
 [build]
-  builder = "paackages"
-
-[build.args]
-  NODE_ENV = "production"
+  dockerfile = "Dockerfile"
 
 [env]
   NODE_ENV = "production"
+  PORT = "8080"
 
 [[services]]
   protocol = "tcp"
@@ -30,8 +28,10 @@ primary_region = "gru"
     port = 443
     handlers = ["tls", "http"]
 
-  [services.tcp_checks]
+  [services.http_checks]
     enabled = true
-    grace_period = "1s"
-    interval = "15s"
-    timeout = "2s"
+    grace_period = "5s"
+    interval = "30s"
+    timeout = "5s"
+    method = "GET"
+    path = "/api/ping"

@@ -1,42 +1,66 @@
-# Build stage
-FROM node:22-alpine AS builder
+# syntax = docker/dockerfile:1
 
+# Adjust NODE_VERSION as desired
+ARG NODE_VERSION=22.21.1
+FROM node:${NODE_VERSION}-slim AS base
+
+LABEL fly_launch_runtime="Vite"
+
+# App lives here
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Set production environment
+ENV NODE_ENV="production"
 
-# Install dependencies
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+# Install pnpm
+ARG PNPM_VERSION=latest
+RUN npm install -g pnpm@$PNPM_VERSION
 
-# Copy source code
+
+# Throw-away build stage to reduce size of final image
+FROM base AS build
+
+# Install packages needed to build node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+
+# Install node modules
+COPY .npmrc package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod=false
+
+# Copy application code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build application
+RUN pnpm run build
 
-# Runtime stage
-FROM node:22-alpine
+# Remove development dependencies
+RUN pnpm prune --prod
 
-WORKDIR /app
 
-# Install production dependencies only
-RUN npm install -g pnpm
+# Final stage for app image
+FROM base
 
-COPY package.json pnpm-lock.yaml ./
+# Install curl for health checks
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-RUN pnpm install --frozen-lockfile --prod
-
-# Copy built application from builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/public ./public
+# Copy built application and node_modules from build stage
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/public ./public
+COPY --from=build /app/package.json ./
 
 # Expose port
 EXPOSE 8080
 
-# Set environment variables
-ENV NODE_ENV=production \
-    PORT=8080
+# Set environment
+ENV PORT=8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/api/ping || exit 1
 
 # Start the server
 CMD ["node", "dist/server/node-build.mjs"]
