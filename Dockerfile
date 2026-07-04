@@ -58,8 +58,8 @@ EXPOSE 8080
 # Set environment
 ENV PORT=8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+# Health check with longer startup period
+HEALTHCHECK --interval=15s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:8080/api/ping || exit 1
 
 # Start the server
