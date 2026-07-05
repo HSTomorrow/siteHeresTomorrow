@@ -34,10 +34,6 @@ COPY . .
 # Build application
 RUN pnpm run build
 
-# Clean up and keep only production dependencies
-RUN rm -rf .git .gitignore .builder node_modules && \
-    pnpm install --frozen-lockfile --prod
-
 
 # Final stage for app image
 FROM base
@@ -47,11 +43,12 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Copy built application and node_modules from build stage
+# Copy built application and ALL node_modules from build stage
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/public ./public
 COPY --from=build /app/package.json ./
+COPY --from=build /app/pnpm-lock.yaml ./
 
 # Expose port
 EXPOSE 8080
