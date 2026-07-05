@@ -1,64 +1,50 @@
-# syntax = docker/dockerfile:1
+# Multi-stage build for HeresTomorrow
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=22.21.1
-FROM node:${NODE_VERSION}-slim AS base
+# Build stage
+FROM node:22-alpine AS builder
 
-LABEL fly_launch_runtime="Vite"
-
-# App lives here
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV="production"
-
 # Install pnpm
-ARG PNPM_VERSION=latest
-RUN npm install -g pnpm@$PNPM_VERSION
+RUN npm install -g pnpm
 
+# Copy package files
+COPY package.json pnpm-lock.yaml .npmrc ./
 
-# Throw-away build stage to reduce size of final image
-FROM base AS build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
-
-# Install node modules
-COPY .npmrc package.json pnpm-lock.yaml ./
+# Install all dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy application code
+# Copy source code
 COPY . .
 
-# Build application
+# Build the application
 RUN pnpm run build
 
 
-# Final stage for app image
-FROM base
+# Runtime stage
+FROM node:22-alpine
 
-# Install curl for health checks
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+WORKDIR /app
 
-# Copy built application and ALL node_modules from build stage
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/public ./public
-COPY --from=build /app/package.json ./
-COPY --from=build /app/pnpm-lock.yaml ./
-
-# Expose port
-EXPOSE 8080
-
-# Set environment
+ENV NODE_ENV=production
 ENV PORT=8080
 
-# Health check with longer startup period (checking TCP port)
-HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+# Install pnpm for running node_modules
+RUN npm install -g pnpm
+
+# Copy package files for runtime reference
+COPY package.json pnpm-lock.yaml .npmrc ./
+
+# Copy prebuilt node_modules and application
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD node -e "require('net').createConnection({port:8080}).on('error',process.exit(1)).on('connect',process.exit(0))" || exit 1
 
-# Start the server
+EXPOSE 8080
+
+# Start server
 CMD ["node", "dist/server/node-build.mjs"]
