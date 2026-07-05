@@ -58,9 +58,9 @@ EXPOSE 8080
 # Set environment
 ENV PORT=8080
 
-# Health check with longer startup period
-HEALTHCHECK --interval=15s --timeout=10s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost:8080/api/ping || exit 1
+# Health check with longer startup period (checking TCP port)
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD node -e "require('net').createConnection({port:8080}).on('error',process.exit(1)).on('connect',process.exit(0))" || exit 1
 
 # Start the server
 CMD ["node", "dist/server/node-build.mjs"]
