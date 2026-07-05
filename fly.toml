@@ -2,9 +2,6 @@
 app = "herestomorrow"
 primary_region = "gru"
 
-[build]
-  dockerfile = "Dockerfile"
-
 [env]
   NODE_ENV = "production"
   PORT = "8080"
