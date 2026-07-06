@@ -1,13 +1,19 @@
 import path from "path";
+import { fileURLToPath } from "url";
 import { createServer } from "./index";
-import * as express from "express";
+import express from "express";
 
 const app = createServer();
 const port = process.env.PORT || 3000;
 
+// Get __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // In production, serve the built SPA files
-const __dirname = import.meta.dirname;
-const distPath = path.join(__dirname, "../spa");
+const distPath = path.resolve(__dirname, "../spa");
+
+console.log(`📁 Serving static files from: ${distPath}`);
 
 // Serve static files
 app.use(express.static(distPath));
@@ -19,11 +25,18 @@ app.get("*", (req, res) => {
     return res.status(404).json({ error: "API endpoint not found" });
   }
 
-  res.sendFile(path.join(distPath, "index.html"));
+  const indexPath = path.join(distPath, "index.html");
+  console.log(`📄 Serving index.html for route: ${req.path} from ${indexPath}`);
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error(`❌ Error serving index.html:`, err);
+      res.status(404).json({ error: "Not found" });
+    }
+  });
 });
 
-app.listen(port, () => {
-  console.log(`🚀 Fusion Starter server running on port ${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${port}`);
   console.log(`📱 Frontend: http://localhost:${port}`);
   console.log(`🔧 API: http://localhost:${port}/api`);
 });
