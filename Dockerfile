@@ -29,15 +29,10 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=8080
 
-# Install pnpm for running node_modules
-RUN npm install -g pnpm
-
-# Copy package files for runtime reference
-COPY package.json pnpm-lock.yaml .npmrc ./
-
 # Copy prebuilt node_modules and application
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/dist/spa ./dist/spa
+COPY --from=builder /app/dist/server ./dist/server
 COPY --from=builder /app/public ./public
 
 # Health check
