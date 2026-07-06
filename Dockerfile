@@ -11,13 +11,14 @@ RUN npm install -g pnpm
 # Copy package files
 COPY package.json pnpm-lock.yaml .npmrc ./
 
-# Install all dependencies
+# Install all dependencies (including devDependencies for build)
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application with NODE_ENV=production for build time
+ENV NODE_ENV=production
 RUN pnpm run build
 
 
