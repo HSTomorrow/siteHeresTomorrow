@@ -1,5 +1,5 @@
 # fly.io configuration for HeresTomorrow
-app = "herestomorrow"
+app = "siteherestomorrow"
 primary_region = "gru"
 
 [env]
@@ -27,6 +27,6 @@ primary_region = "gru"
 
   [services.tcp_checks]
     enabled = true
-    grace_period = "30s"
+    grace_period = "45s"
     interval = "15s"
     timeout = "10s"
