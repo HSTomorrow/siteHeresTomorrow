@@ -224,11 +224,26 @@ async function gerarQuestoes(
     messages: [
       {
         role: "user",
-        content: [...anexos.map((a) => a.bloco), { type: "text", text: texto }],
+        // Os materiais vêm primeiro e o último recebe cache_control: nas rodadas
+        // seguintes (até 1 h) a releitura dos PDFs custa ~10% do preço normal.
+        // O texto com a lista de questões existentes muda a cada rodada, por
+        // isso fica depois do ponto de cache.
+        content: [
+          ...anexos.map((a, i) =>
+            i === anexos.length - 1
+              ? ({ ...a.bloco, cache_control: { type: "ephemeral", ttl: "1h" } } as Anthropic.ContentBlockParam)
+              : a.bloco,
+          ),
+          { type: "text", text: texto },
+        ],
       },
     ],
   });
   const resposta = await stream.finalMessage();
+  const uso = resposta.usage;
+  console.log(
+    `🧠 Reprocessamento ${materiaId}: entrada ${uso.input_tokens} | cache gravado ${uso.cache_creation_input_tokens ?? 0} | cache lido ${uso.cache_read_input_tokens ?? 0} | saída ${uso.output_tokens}`,
+  );
 
   if (resposta.stop_reason === "refusal") {
     throw new Error("O modelo recusou gerar questões para este material.");
