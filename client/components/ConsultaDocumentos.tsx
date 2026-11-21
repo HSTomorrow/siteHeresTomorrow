@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { BookOpen, Download, ExternalLink, FileText, Image as ImageIcon, Loader2 } from "lucide-react";
+import { BookOpen, BookText, Download, ExternalLink, FileText, Image as ImageIcon, Loader2 } from "lucide-react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { materias, getMateria, type ArquivoMaterial } from "@/data/materiais";
+import ApostilaLeitor from "@/components/ApostilaLeitor";
 import { cn } from "@/lib/utils";
-import type { MateriaisResponse } from "@shared/api";
+import type { ApostilaResumo, ApostilasResponse, MateriaisResponse } from "@shared/api";
 
 type Documento = ArquivoMaterial & { materiaId: string };
 
@@ -15,23 +16,56 @@ function nomeParaDownload(doc: Documento) {
  * Botão "Consulta": abre um painel lateral com todos os materiais (os do site
  * e os enviados pelo admin) para consultar sem sair do simulado.
  */
+function BotaoApostila({ resumo, onAbrir }: { resumo: ApostilaResumo; onAbrir: () => void }) {
+  const total = resumo.secoes + resumo.pendentes.length;
+  return (
+    <button
+      onClick={onAbrir}
+      className="w-full flex items-center gap-3 p-3 rounded-xl border border-primary/40 bg-primary/5 text-left hover:border-primary transition-colors"
+    >
+      <span className="p-2 rounded-lg bg-primary text-white flex-shrink-0">
+        <BookText className="w-4 h-4" />
+      </span>
+      <span className="min-w-0">
+        <span className="block font-semibold text-sm">Apostila da matéria</span>
+        <span className="block text-xs text-muted-foreground truncate">
+          Todo o material em texto, com índice e busca
+          {resumo.pendentes.length > 0 && ` · ${resumo.secoes} de ${total} arquivos`}
+        </span>
+      </span>
+    </button>
+  );
+}
+
 export default function ConsultaDocumentos({ materiaAtual }: { materiaAtual?: string }) {
   const [aberto, setAberto] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [enviados, setEnviados] = useState<Documento[]>([]);
   const [filtro, setFiltro] = useState<string>(materiaAtual ?? "todas");
   const [selecionado, setSelecionado] = useState<Documento | null>(null);
+  const [apostilas, setApostilas] = useState<ApostilaResumo[]>([]);
+  const [apostilaAberta, setApostilaAberta] = useState<string | null>(null);
 
   // Recarrega a lista sempre que o painel abre (pega uploads recentes)
   useEffect(() => {
     if (!aberto) return;
     setCarregando(true);
-    fetch("/api/materiais")
-      .then((r) => (r.ok ? r.json() : { materiais: [] }))
-      .then((d: MateriaisResponse) => setEnviados(d.materiais))
-      .catch(() => setEnviados([]))
-      .finally(() => setCarregando(false));
+    Promise.all([
+      fetch("/api/materiais")
+        .then((r) => (r.ok ? r.json() : { materiais: [] }))
+        .then((d: MateriaisResponse) => setEnviados(d.materiais))
+        .catch(() => setEnviados([])),
+      fetch("/api/apostilas")
+        .then((r) => (r.ok ? r.json() : { apostilas: [] }))
+        .then((d: ApostilasResponse) => setApostilas(d.apostilas))
+        .catch(() => setApostilas([])),
+    ]).finally(() => setCarregando(false));
   }, [aberto]);
+
+  const voltarALista = () => {
+    setSelecionado(null);
+    setApostilaAberta(null);
+  };
 
   const documentos = useMemo<Documento[]>(
     () => [
@@ -57,7 +91,7 @@ export default function ConsultaDocumentos({ materiaAtual }: { materiaAtual?: st
       open={aberto}
       onOpenChange={(v) => {
         setAberto(v);
-        if (!v) setSelecionado(null);
+        if (!v) voltarALista();
       }}
     >
       <SheetTrigger asChild>
@@ -77,7 +111,7 @@ export default function ConsultaDocumentos({ materiaAtual }: { materiaAtual?: st
             value={filtro}
             onChange={(e) => {
               setFiltro(e.target.value);
-              setSelecionado(null);
+              voltarALista();
             }}
             className="mt-2 px-3 py-2 rounded-xl border border-neutral-300 bg-white text-sm"
             aria-label="Filtrar por matéria"
@@ -92,7 +126,22 @@ export default function ConsultaDocumentos({ materiaAtual }: { materiaAtual?: st
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto">
-          {selecionado ? (
+          {apostilaAberta ? (
+            <div>
+              <div className="flex items-center gap-2 p-4 border-b border-neutral-200">
+                <button
+                  onClick={voltarALista}
+                  className="text-sm text-muted-foreground hover:text-primary mr-auto"
+                >
+                  ← Voltar à lista
+                </button>
+                <span className="text-sm font-semibold">
+                  Apostila · {getMateria(apostilaAberta)?.nome ?? apostilaAberta}
+                </span>
+              </div>
+              <ApostilaLeitor materiaId={apostilaAberta} />
+            </div>
+          ) : selecionado ? (
             <div className="flex flex-col h-full">
               <div className="flex flex-wrap items-center gap-2 p-4 border-b border-neutral-200">
                 <button
@@ -156,6 +205,15 @@ export default function ConsultaDocumentos({ materiaAtual }: { materiaAtual?: st
                     {materia.nome} ({docs.length})
                   </h3>
                   <ul className="grid gap-2">
+                    {apostilas.map(
+                      (a) =>
+                        a.materiaId === materia.id &&
+                        a.secoes > 0 && (
+                          <li key="apostila">
+                            <BotaoApostila resumo={a} onAbrir={() => setApostilaAberta(materia.id)} />
+                          </li>
+                        ),
+                    )}
                     {docs.map((d) => (
                       <li key={d.caminho}>
                         <button

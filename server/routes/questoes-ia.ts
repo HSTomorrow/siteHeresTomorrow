@@ -1,9 +1,8 @@
 import crypto from "crypto";
-import { createReadStream } from "fs";
 import fs from "fs/promises";
 import path from "path";
 import { Router } from "express";
-import Anthropic, { toFile } from "@anthropic-ai/sdk";
+import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import type {
   QuestaoGerada,
@@ -13,7 +12,14 @@ import type {
 } from "@shared/api";
 import { getMateria } from "../../shared/materiais";
 import { getQuestoesDaMateria } from "../../client/data/questoes";
-import { MATERIALS_DIR, exigirAdmin, listarMateriaisEnviados } from "./materiais";
+import { exigirAdmin } from "./materiais";
+import { lerTranscricoes } from "./apostila";
+import {
+  QUESTIONS_DIR,
+  blocoDoArquivo,
+  listarFontes,
+  mensagemDeErroClaude,
+} from "../lib/fontes-materia";
 
 /**
  * "Reprocessamento": gera questões novas com o Claude a partir dos materiais
@@ -27,18 +33,15 @@ import { MATERIALS_DIR, exigirAdmin, listarMateriaisEnviados } from "./materiais
  * referenciados por file_id. Assim o servidor (256 MB no fly.io) não carrega
  * ~20 MB de PDFs em base64 na memória a cada reprocessamento — era isso que
  * derrubava o processo por falta de memória.
+ *
+ * Arquivos que já têm apostila (ver ./apostila.ts) vão como texto, bem mais
+ * barato em tokens do que o PDF ou a imagem.
  */
 
-const QUESTIONS_DIR = path.resolve(
-  process.env.QUESTIONS_DIR ?? path.join(path.dirname(MATERIALS_DIR), "questoes"),
-);
-const PUBLIC_DIR = path.resolve("public");
 const MODELO = "claude-opus-5-5";
 // Limite de materiais por reprocessamento (controla o custo em tokens de entrada).
+// Arquivos ainda sem apostila contam pelo tamanho do arquivo; os transcritos, pelo texto.
 const LIMITE_BYTES_ANEXOS = 20 * 1024 * 1024;
-// file_ids já enviados à Files API, por arquivo local (caminho + tamanho + data).
-// (fica em subpasta: GET /api/questoes lê todo *.json da raiz de QUESTIONS_DIR)
-const ARQUIVO_CACHE_FILES = path.join(QUESTIONS_DIR, "_meta", "files-api.json");
 // Status dos reprocessamentos, para sobreviver a reinícios do servidor.
 const JOBS_DIR = path.join(QUESTIONS_DIR, "_jobs");
 
@@ -116,114 +119,41 @@ const QuestaoSchema = z
 
 /* ───────────── Anexos (materiais da matéria) ───────────── */
 
-type Anexo = { nome: string; bloco: Anthropic.ContentBlockParam; bytes: number };
+type Anexo = { nome: string; bloco: Anthropic.ContentBlockParam };
 
-const IMAGEM_MIME: Record<string, "image/png" | "image/jpeg" | "image/webp" | "image/gif"> = {
-  ".png": "image/png",
-  ".jpg": "image/jpeg",
-  ".jpeg": "image/jpeg",
-  ".webp": "image/webp",
-  ".gif": "image/gif",
-};
-
-type CacheFiles = Record<string, string>; // chave do arquivo local -> file_id
-
-async function lerCacheFiles(): Promise<CacheFiles> {
-  try {
-    return JSON.parse(await fs.readFile(ARQUIVO_CACHE_FILES, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-async function gravarCacheFiles(cache: CacheFiles) {
-  await fs.mkdir(path.dirname(ARQUIVO_CACHE_FILES), { recursive: true });
-  await fs.writeFile(`${ARQUIVO_CACHE_FILES}.tmp`, JSON.stringify(cache, null, 2));
-  await fs.rename(`${ARQUIVO_CACHE_FILES}.tmp`, ARQUIVO_CACHE_FILES);
-}
-
-/** file_id do arquivo na Files API; envia o arquivo (em streaming, do disco) se preciso. */
-async function obterFileId(
-  client: Anthropic,
-  cache: CacheFiles,
-  arquivo: string,
-  chave: string,
-  mime: string,
-): Promise<string> {
-  const existente = cache[chave];
-  if (existente) {
-    try {
-      await client.files.retrieveMetadata(existente);
-      return existente;
-    } catch (err) {
-      // Apagado da conta: envia de novo. Outros erros sobem.
-      if (!(err instanceof Anthropic.NotFoundError)) throw err;
-    }
-  }
-  const enviado = await client.files.upload({
-    file: await toFile(createReadStream(arquivo), path.basename(arquivo), { type: mime }),
-  });
-  cache[chave] = enviado.id;
-  return enviado.id;
+/** Escapa o que fecharia a tag <documento> no meio do texto transcrito. */
+function escaparTag(texto: string) {
+  return texto.replace(/<\/?documento\b/gi, (m) => m.replace("<", "&lt;"));
 }
 
 async function montarAnexos(client: Anthropic, materiaId: string) {
-  const materia = getMateria(materiaId);
-  const fontes: { nome: string; arquivo: string }[] = [];
-
-  // Arquivos estáticos do catálogo (public/...)
-  for (const a of materia?.arquivos ?? []) {
-    fontes.push({ nome: a.titulo, arquivo: path.join(PUBLIC_DIR, a.caminho) });
-  }
-  // Arquivos enviados pelo administrador
-  for (const m of await listarMateriaisEnviados()) {
-    if (m.materiaId === materiaId) {
-      fontes.push({ nome: m.titulo, arquivo: path.join(MATERIALS_DIR, path.basename(m.caminho)) });
-    }
-  }
-
+  const [{ fontes, ignorados }, transcricoes] = await Promise.all([
+    listarFontes(materiaId),
+    lerTranscricoes(materiaId),
+  ]);
   const usados: Anexo[] = [];
-  const ignorados: string[] = [];
-  const cache = await lerCacheFiles();
   let total = 0;
 
-  try {
-    for (const f of fontes) {
-      const ext = path.extname(f.arquivo).toLowerCase();
-      if (ext !== ".pdf" && !IMAGEM_MIME[ext]) {
-        ignorados.push(`${f.nome} (formato não suportado)`);
-        continue;
-      }
-      let tamanho: number;
-      let modificado: number;
-      try {
-        const info = await fs.stat(f.arquivo);
-        tamanho = info.size;
-        modificado = info.mtimeMs;
-      } catch {
-        ignorados.push(`${f.nome} (arquivo não encontrado)`);
-        continue;
-      }
-      if (total + tamanho > LIMITE_BYTES_ANEXOS) {
-        ignorados.push(`${f.nome} (limite de tamanho por reprocessamento)`);
-        continue;
-      }
-      total += tamanho;
-
-      const mime = ext === ".pdf" ? "application/pdf" : IMAGEM_MIME[ext];
-      const chave = `${f.arquivo}|${tamanho}|${modificado}`;
-      const fileId = await obterFileId(client, cache, f.arquivo, chave, mime);
-      const bloco: Anthropic.ContentBlockParam =
-        ext === ".pdf"
-          ? { type: "document", source: { type: "file", file_id: fileId }, title: f.nome }
-          : { type: "image", source: { type: "file", file_id: fileId } };
-      usados.push({ nome: f.nome, bloco, bytes: tamanho });
+  for (const f of fontes) {
+    const transcricao = transcricoes[f.chave];
+    const peso = transcricao ? Buffer.byteLength(transcricao.markdown) : f.tamanho;
+    if (total + peso > LIMITE_BYTES_ANEXOS) {
+      ignorados.push(`${f.nome} (limite de tamanho por reprocessamento)`);
+      continue;
     }
-  } finally {
-    // Grava mesmo se um envio falhar no meio, para não reenviar o que já subiu.
-    await gravarCacheFiles(cache).catch((err) =>
-      console.error("⚠️ Não foi possível gravar o cache da Files API:", err),
-    );
+    total += peso;
+
+    if (transcricao) {
+      usados.push({
+        nome: `${f.nome} (apostila)`,
+        bloco: {
+          type: "text",
+          text: `<documento titulo="${f.nome.replace(/"/g, "'")}">\n${escaparTag(transcricao.markdown)}\n</documento>`,
+        },
+      });
+    } else {
+      usados.push({ nome: f.nome, bloco: await blocoDoArquivo(client, f) });
+    }
   }
 
   return { usados, ignorados };
@@ -401,15 +331,7 @@ async function executarJob(job: ReprocessamentoStatus, req: ReprocessarRequest) 
     job.geradas = geradas.length;
   } catch (err) {
     job.estado = "erro";
-    if (err instanceof Anthropic.AuthenticationError) {
-      job.mensagem = "Chave da API do Claude inválida. Confira ANTHROPIC_API_KEY no servidor.";
-    } else if (err instanceof Anthropic.RateLimitError) {
-      job.mensagem = "Limite de uso da API atingido. Aguarde alguns minutos e tente de novo.";
-    } else if (err instanceof Anthropic.APIError) {
-      job.mensagem = `Erro da API do Claude (${err.status ?? "sem status"}): ${err.message}`;
-    } else {
-      job.mensagem = err instanceof Error ? err.message : "Falha ao gerar questões.";
-    }
+    job.mensagem = mensagemDeErroClaude(err, "Falha ao gerar questões.");
     console.error("❌ Reprocessamento falhou:", err);
   } finally {
     emAndamento.delete(req.materia);
