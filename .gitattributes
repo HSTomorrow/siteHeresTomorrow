@@ -1,0 +1,8 @@
+# Arquivos binários: sem conversão de quebra de linha
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
