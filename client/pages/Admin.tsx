@@ -1,6 +1,7 @@
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
+import ApostilasAdmin from "@/components/ApostilasAdmin";
 import { materias, getMateria } from "@/data/materiais";
 import type { MateriaisResponse, MaterialEnviado } from "@shared/api";
 import { cn } from "@/lib/utils";
@@ -385,6 +386,8 @@ function Painel({ token, onSair }: { token: string; onSair: () => void }) {
           </ul>
         )}
       </div>
+
+      <ApostilasAdmin token={token} onSair={onSair} versaoMateriais={lista} />
     </div>
   );
 }

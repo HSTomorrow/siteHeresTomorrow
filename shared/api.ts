@@ -78,6 +78,44 @@ export interface ReprocessamentoStatus {
 }
 
 /**
+ * Apostila: transcrição em Markdown dos materiais de uma matéria, uma seção
+ * por arquivo (GET /api/apostilas, GET /api/apostilas/:materia)
+ */
+export interface ApostilaSecao {
+  titulo: string;
+  markdown: string;
+  geradaEm: string;
+}
+
+export interface ApostilaGeracao {
+  estado: "processando" | "concluido" | "erro";
+  total: number;
+  concluidos: number;
+  /** Arquivo sendo transcrito agora */
+  atual?: string;
+  mensagem?: string;
+  /** Arquivos que não puderam ser transcritos (continuam sendo usados em PDF/imagem) */
+  falhas?: string[];
+}
+
+export interface ApostilaResumo {
+  materiaId: string;
+  /** Arquivos já transcritos */
+  secoes: number;
+  /** Arquivos ainda sem transcrição (novos ou alterados) */
+  pendentes: string[];
+  geracao?: ApostilaGeracao;
+}
+
+export interface ApostilasResponse {
+  apostilas: ApostilaResumo[];
+}
+
+export interface ApostilaResponse extends Omit<ApostilaResumo, "secoes"> {
+  secoes: ApostilaSecao[];
+}
+
+/**
  * Response type for /api/news
  */
 export interface NewsResponse {

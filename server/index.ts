@@ -5,6 +5,7 @@ import { handleDemo } from "./routes/demo";
 import { handleGetNews } from "./routes/news";
 import { materiaisRouter } from "./routes/materiais";
 import { questoesRouter } from "./routes/questoes-ia";
+import { apostilaRouter } from "./routes/apostila";
 
 export function createServer() {
   const app = express();
@@ -28,6 +29,9 @@ export function createServer() {
 
   // Questões geradas por IA ("Reprocessamento" em /prova)
   app.use(questoesRouter());
+
+  // Apostila (transcrição dos materiais) — Consulta e Reprocessamento
+  app.use(apostilaRouter());
 
   return app;
 }
