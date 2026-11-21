@@ -1,8 +1,9 @@
 import crypto from "crypto";
+import { createReadStream } from "fs";
 import fs from "fs/promises";
 import path from "path";
 import { Router } from "express";
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic, { toFile } from "@anthropic-ai/sdk";
 import { z } from "zod";
 import type {
   QuestaoGerada,
@@ -21,6 +22,11 @@ import { MATERIALS_DIR, exigirAdmin, listarMateriaisEnviados } from "./materiais
  *
  * As questões geradas ficam em QUESTIONS_DIR (padrão: pasta "questoes" ao
  * lado de MATERIALS_DIR — no fly.io, /data/questoes, dentro do volume).
+ *
+ * Os materiais são enviados uma única vez para a Files API do Claude e
+ * referenciados por file_id. Assim o servidor (256 MB no fly.io) não carrega
+ * ~20 MB de PDFs em base64 na memória a cada reprocessamento — era isso que
+ * derrubava o processo por falta de memória.
  */
 
 const QUESTIONS_DIR = path.resolve(
@@ -28,8 +34,13 @@ const QUESTIONS_DIR = path.resolve(
 );
 const PUBLIC_DIR = path.resolve("public");
 const MODELO = "claude-opus-5-5";
-// Limite de anexos por requisição (a API aceita até 32 MB; base64 aumenta ~33%).
+// Limite de materiais por reprocessamento (controla o custo em tokens de entrada).
 const LIMITE_BYTES_ANEXOS = 20 * 1024 * 1024;
+// file_ids já enviados à Files API, por arquivo local (caminho + tamanho + data).
+// (fica em subpasta: GET /api/questoes lê todo *.json da raiz de QUESTIONS_DIR)
+const ARQUIVO_CACHE_FILES = path.join(QUESTIONS_DIR, "_meta", "files-api.json");
+// Status dos reprocessamentos, para sobreviver a reinícios do servidor.
+const JOBS_DIR = path.join(QUESTIONS_DIR, "_jobs");
 
 const TECLAS_HP =
   "f g n i PV PMT FV CHS ENTER CLx STO RCL EEX % yˣ LN + − × ÷ CF0 CFj Nj NPV IRR INT BEG END 12÷ 12× D.MY M.DY ΔDYS DATE x≷y, e os comandos compostos \"f CLEAR FIN\" e \"f CLEAR REG\"";
@@ -115,7 +126,48 @@ const IMAGEM_MIME: Record<string, "image/png" | "image/jpeg" | "image/webp" | "i
   ".gif": "image/gif",
 };
 
-async function montarAnexos(materiaId: string) {
+type CacheFiles = Record<string, string>; // chave do arquivo local -> file_id
+
+async function lerCacheFiles(): Promise<CacheFiles> {
+  try {
+    return JSON.parse(await fs.readFile(ARQUIVO_CACHE_FILES, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+async function gravarCacheFiles(cache: CacheFiles) {
+  await fs.mkdir(path.dirname(ARQUIVO_CACHE_FILES), { recursive: true });
+  await fs.writeFile(`${ARQUIVO_CACHE_FILES}.tmp`, JSON.stringify(cache, null, 2));
+  await fs.rename(`${ARQUIVO_CACHE_FILES}.tmp`, ARQUIVO_CACHE_FILES);
+}
+
+/** file_id do arquivo na Files API; envia o arquivo (em streaming, do disco) se preciso. */
+async function obterFileId(
+  client: Anthropic,
+  cache: CacheFiles,
+  arquivo: string,
+  chave: string,
+  mime: string,
+): Promise<string> {
+  const existente = cache[chave];
+  if (existente) {
+    try {
+      await client.files.retrieveMetadata(existente);
+      return existente;
+    } catch (err) {
+      // Apagado da conta: envia de novo. Outros erros sobem.
+      if (!(err instanceof Anthropic.NotFoundError)) throw err;
+    }
+  }
+  const enviado = await client.files.upload({
+    file: await toFile(createReadStream(arquivo), path.basename(arquivo), { type: mime }),
+  });
+  cache[chave] = enviado.id;
+  return enviado.id;
+}
+
+async function montarAnexos(client: Anthropic, materiaId: string) {
   const materia = getMateria(materiaId);
   const fontes: { nome: string; arquivo: string }[] = [];
 
@@ -132,36 +184,46 @@ async function montarAnexos(materiaId: string) {
 
   const usados: Anexo[] = [];
   const ignorados: string[] = [];
+  const cache = await lerCacheFiles();
   let total = 0;
 
-  for (const f of fontes) {
-    const ext = path.extname(f.arquivo).toLowerCase();
-    if (ext !== ".pdf" && !IMAGEM_MIME[ext]) {
-      ignorados.push(`${f.nome} (formato não suportado)`);
-      continue;
+  try {
+    for (const f of fontes) {
+      const ext = path.extname(f.arquivo).toLowerCase();
+      if (ext !== ".pdf" && !IMAGEM_MIME[ext]) {
+        ignorados.push(`${f.nome} (formato não suportado)`);
+        continue;
+      }
+      let tamanho: number;
+      let modificado: number;
+      try {
+        const info = await fs.stat(f.arquivo);
+        tamanho = info.size;
+        modificado = info.mtimeMs;
+      } catch {
+        ignorados.push(`${f.nome} (arquivo não encontrado)`);
+        continue;
+      }
+      if (total + tamanho > LIMITE_BYTES_ANEXOS) {
+        ignorados.push(`${f.nome} (limite de tamanho por reprocessamento)`);
+        continue;
+      }
+      total += tamanho;
+
+      const mime = ext === ".pdf" ? "application/pdf" : IMAGEM_MIME[ext];
+      const chave = `${f.arquivo}|${tamanho}|${modificado}`;
+      const fileId = await obterFileId(client, cache, f.arquivo, chave, mime);
+      const bloco: Anthropic.ContentBlockParam =
+        ext === ".pdf"
+          ? { type: "document", source: { type: "file", file_id: fileId }, title: f.nome }
+          : { type: "image", source: { type: "file", file_id: fileId } };
+      usados.push({ nome: f.nome, bloco, bytes: tamanho });
     }
-    let dados: Buffer;
-    try {
-      dados = await fs.readFile(f.arquivo);
-    } catch {
-      ignorados.push(`${f.nome} (arquivo não encontrado)`);
-      continue;
-    }
-    if (total + dados.length > LIMITE_BYTES_ANEXOS) {
-      ignorados.push(`${f.nome} (limite de tamanho por reprocessamento)`);
-      continue;
-    }
-    total += dados.length;
-    const data = dados.toString("base64");
-    const bloco: Anthropic.ContentBlockParam =
-      ext === ".pdf"
-        ? {
-            type: "document",
-            source: { type: "base64", media_type: "application/pdf", data },
-            title: f.nome,
-          }
-        : { type: "image", source: { type: "base64", media_type: IMAGEM_MIME[ext], data } };
-    usados.push({ nome: f.nome, bloco, bytes: dados.length });
+  } finally {
+    // Grava mesmo se um envio falhar no meio, para não reenviar o que já subiu.
+    await gravarCacheFiles(cache).catch((err) =>
+      console.error("⚠️ Não foi possível gravar o cache da Files API:", err),
+    );
   }
 
   return { usados, ignorados };
@@ -192,13 +254,13 @@ Exemplo: [{"teclas":"f CLEAR FIN","descricao":"Limpa os registradores financeiro
 }
 
 async function gerarQuestoes(
+  client: Anthropic,
   materiaId: string,
   quantidade: number,
   anexos: Anexo[],
   existentes: string[],
 ): Promise<z.infer<typeof QuestaoSchema>[]> {
   const materia = getMateria(materiaId);
-  const client = new Anthropic();
 
   const texto = [
     `Matéria: ${materia?.nome ?? materiaId}${materia ? ` — ${materia.descricao}` : ""}`,
@@ -265,10 +327,42 @@ async function gerarQuestoes(
 
 const jobs = new Map<string, ReprocessamentoStatus>();
 const emAndamento = new Set<string>();
+const VALIDADE_JOB_MS = 24 * 60 * 60 * 1000;
+
+function arquivoDoJob(id: string) {
+  return path.join(JOBS_DIR, `${path.basename(id)}.json`);
+}
+
+async function salvarJob(job: ReprocessamentoStatus) {
+  try {
+    await fs.mkdir(JOBS_DIR, { recursive: true });
+    await fs.writeFile(arquivoDoJob(job.id), JSON.stringify(job));
+  } catch (err) {
+    console.error("⚠️ Não foi possível gravar o status do reprocessamento:", err);
+  }
+}
+
+async function lerJobDoDisco(id: string): Promise<ReprocessamentoStatus | undefined> {
+  try {
+    return JSON.parse(await fs.readFile(arquivoDoJob(id), "utf8"));
+  } catch {
+    return undefined;
+  }
+}
+
+async function limparJobsAntigos() {
+  const nomes = await fs.readdir(JOBS_DIR).catch(() => [] as string[]);
+  for (const n of nomes) {
+    const arq = path.join(JOBS_DIR, n);
+    const info = await fs.stat(arq).catch(() => undefined);
+    if (info && Date.now() - info.mtimeMs > VALIDADE_JOB_MS) await fs.rm(arq, { force: true });
+  }
+}
 
 async function executarJob(job: ReprocessamentoStatus, req: ReprocessarRequest) {
   try {
-    const { usados, ignorados } = await montarAnexos(req.materia);
+    const client = new Anthropic();
+    const { usados, ignorados } = await montarAnexos(client, req.materia);
     job.arquivosUsados = usados.map((u) => u.nome);
     job.arquivosIgnorados = ignorados;
     if (usados.length === 0) {
@@ -284,7 +378,7 @@ async function executarJob(job: ReprocessamentoStatus, req: ReprocessarRequest) 
       ...atuais.map((q) => q.enunciado),
     ];
 
-    const novas = await gerarQuestoes(req.materia, req.quantidade, usados, existentes);
+    const novas = await gerarQuestoes(client, req.materia, req.quantidade, usados, existentes);
     if (novas.length === 0) throw new Error("Nenhuma questão válida foi gerada. Tente novamente.");
 
     const agora = new Date().toISOString();
@@ -319,7 +413,8 @@ async function executarJob(job: ReprocessamentoStatus, req: ReprocessarRequest) 
     console.error("❌ Reprocessamento falhou:", err);
   } finally {
     emAndamento.delete(req.materia);
-    // Mantém o status por 1 hora para a página consultar
+    await salvarJob(job);
+    // Mantém o status em memória por 1 hora (e no disco por 24 h)
     setTimeout(() => jobs.delete(job.id), 60 * 60 * 1000).unref();
   }
 }
@@ -328,6 +423,7 @@ async function executarJob(job: ReprocessamentoStatus, req: ReprocessarRequest) 
 
 export function questoesRouter(): Router {
   const router = Router();
+  void limparJobsAntigos();
 
   router.get("/api/questoes", async (req, res) => {
     const materia = typeof req.query.materia === "string" ? req.query.materia : "";
@@ -348,7 +444,7 @@ export function questoesRouter(): Router {
     res.json(resposta);
   });
 
-  router.post("/api/questoes/reprocessar", exigirAdmin, (req, res) => {
+  router.post("/api/questoes/reprocessar", exigirAdmin, async (req, res) => {
     if (!process.env.ANTHROPIC_API_KEY) {
       res.status(503).json({ error: "Reprocessamento desativado: defina ANTHROPIC_API_KEY no servidor." });
       return;
@@ -373,14 +469,26 @@ export function questoesRouter(): Router {
     const job: ReprocessamentoStatus = { id: crypto.randomUUID(), materia, estado: "processando" };
     jobs.set(job.id, job);
     emAndamento.add(materia);
+    await salvarJob(job);
     void executarJob(job, { materia, quantidade });
     res.status(202).json(job);
   });
 
-  router.get("/api/questoes/reprocessar/:id", (req, res) => {
-    const job = jobs.get(req.params.id);
+  router.get("/api/questoes/reprocessar/:id", async (req, res) => {
+    const job = jobs.get(req.params.id) ?? (await lerJobDoDisco(req.params.id));
     if (!job) {
       res.status(404).json({ error: "Reprocessamento não encontrado (o servidor pode ter reiniciado)." });
+      return;
+    }
+    if (job.estado === "processando" && !jobs.has(job.id)) {
+      // Estava em andamento quando o servidor reiniciou: o trabalho foi perdido.
+      const interrompido: ReprocessamentoStatus = {
+        ...job,
+        estado: "erro",
+        mensagem:
+          "O servidor reiniciou durante o reprocessamento e ele foi interrompido. As questões já existentes não foram afetadas; tente novamente.",
+      };
+      res.json(interrompido);
       return;
     }
     res.json(job);
