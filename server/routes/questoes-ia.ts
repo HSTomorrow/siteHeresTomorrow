@@ -262,7 +262,8 @@ async function executarJob(job: ReprocessamentoStatus, req: ReprocessarRequest) 
       );
     }
 
-    const atuais = req.modo === "adicionar" ? await lerGeradas(req.materia) : [];
+    // Nunca apaga: as novas questões são sempre somadas às já geradas.
+    const atuais = await lerGeradas(req.materia);
     const existentes = [
       ...getQuestoesDaMateria(req.materia).map((q) => q.enunciado),
       ...atuais.map((q) => q.enunciado),
@@ -340,7 +341,6 @@ export function questoesRouter(): Router {
     const corpo = req.body as Partial<ReprocessarRequest>;
     const materia = typeof corpo.materia === "string" ? corpo.materia : "";
     const quantidade = Number(corpo.quantidade);
-    const modo = corpo.modo === "adicionar" ? "adicionar" : "substituir";
 
     if (!getMateria(materia)) {
       res.status(400).json({ error: "Matéria inválida." });
@@ -358,7 +358,7 @@ export function questoesRouter(): Router {
     const job: ReprocessamentoStatus = { id: crypto.randomUUID(), materia, estado: "processando" };
     jobs.set(job.id, job);
     emAndamento.add(materia);
-    void executarJob(job, { materia, quantidade, modo });
+    void executarJob(job, { materia, quantidade });
     res.status(202).json(job);
   });
 

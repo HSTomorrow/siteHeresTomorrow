@@ -392,17 +392,16 @@ async function mensagemDeErro(r: Response): Promise<string> {
 
 function PainelReprocessamento({
   materiaId,
-  temGeradas,
+  totalGeradas,
   onConcluido,
 }: {
   materiaId: string;
-  temGeradas: boolean;
+  totalGeradas: number;
   onConcluido: () => void;
 }) {
   const [aberto, setAberto] = useState(false);
   const [token, setToken] = useState(lerToken);
   const [quantidade, setQuantidade] = useState(10);
-  const [modo, setModo] = useState<"substituir" | "adicionar">("substituir");
   const [status, setStatus] = useState<ReprocessamentoStatus | null>(null);
   const [erro, setErro] = useState("");
   const processando = status?.estado === "processando";
@@ -433,7 +432,7 @@ function PainelReprocessamento({
       const r = await fetch("/api/questoes/reprocessar", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ materia: materiaId, quantidade, modo }),
+        body: JSON.stringify({ materia: materiaId, quantidade }),
       });
       if (!r.ok) throw new Error(await mensagemDeErro(r));
       salvarToken(token);
@@ -463,8 +462,10 @@ function PainelReprocessamento({
             <Sparkles className="w-4 h-4 text-violet-600" /> Reprocessamento
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Gera questões novas com IA a partir dos PDFs e imagens desta matéria. As questões fixas
-            continuam no simulado. Pode levar alguns minutos.
+            Gera questões novas com IA a partir dos PDFs e imagens desta matéria. As novas são
+            somadas às existentes — nenhuma questão é apagada
+            {totalGeradas > 0 ? ` (hoje há ${totalGeradas} geradas por IA)` : ""}. Pode levar alguns
+            minutos.
           </p>
         </div>
         {!processando && (
@@ -478,7 +479,7 @@ function PainelReprocessamento({
         )}
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-1.5 text-sm font-medium">
           Quantidade
           <select
@@ -492,18 +493,6 @@ function PainelReprocessamento({
                 {n} questões
               </option>
             ))}
-          </select>
-        </label>
-        <label className="grid gap-1.5 text-sm font-medium">
-          O que fazer
-          <select
-            value={modo}
-            onChange={(e) => setModo(e.target.value as "substituir" | "adicionar")}
-            disabled={processando}
-            className="px-3 py-2.5 rounded-xl border border-neutral-300 bg-white font-normal"
-          >
-            <option value="substituir">{temGeradas ? "Refazer (substitui as geradas)" : "Criar novas"}</option>
-            <option value="adicionar">Adicionar às já geradas</option>
           </select>
         </label>
         <label className="grid gap-1.5 text-sm font-medium">
@@ -584,7 +573,7 @@ export default function Prova() {
         : [],
     [materia, geradas],
   );
-  const temGeradas = !!materia && geradas.some((g) => g.materiaId === materia.id);
+  const totalGeradas = materia ? geradas.filter((g) => g.materiaId === materia.id).length : 0;
 
   return (
     <Layout>
@@ -620,7 +609,7 @@ export default function Prova() {
                 <PainelReprocessamento
                   key={materia.id}
                   materiaId={materia.id}
-                  temGeradas={temGeradas}
+                  totalGeradas={totalGeradas}
                   onConcluido={aposReprocessar}
                 />
               )}

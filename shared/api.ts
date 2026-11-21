@@ -65,7 +65,6 @@ export interface QuestoesResponse {
 export interface ReprocessarRequest {
   materia: string;
   quantidade: number;
-  modo: "substituir" | "adicionar";
 }
 
 export interface ReprocessamentoStatus {
