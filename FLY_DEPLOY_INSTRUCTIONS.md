@@ -1,6 +1,6 @@
 # Deployment Instructions for fly.io
 
-This document provides step-by-step instructions to deploy the HeresTomorrow application to fly.io.
+This document provides step-by-step instructions to deploy the Here’s Tomorrow application to fly.io.
 
 ## Prerequisites
 

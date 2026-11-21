@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleGetNews } from "./routes/news";
+import { materiaisRouter } from "./routes/materiais";
+import { questoesRouter } from "./routes/questoes-ia";
 
 export function createServer() {
   const app = express();
@@ -20,6 +22,12 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
   app.get("/api/news", handleGetNews);
+
+  // Materiais de estudo enviados pelo administrador
+  app.use(materiaisRouter());
+
+  // Questões geradas por IA ("Reprocessamento" em /prova)
+  app.use(questoesRouter());
 
   return app;
 }

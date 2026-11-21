@@ -1,4 +1,4 @@
-# Multi-stage build for HeresTomorrow
+# Multi-stage build for Here’s Tomorrow
 
 # Build stage
 FROM node:20-alpine AS builder

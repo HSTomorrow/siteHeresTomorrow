@@ -5,7 +5,6 @@ import {
   Server,
   Users,
   Lightbulb,
-  Building2,
   BarChart3,
   GitBranch,
   Cloud,
@@ -13,7 +12,6 @@ import {
 } from "lucide-react";
 
 const serviceIcons = {
-  restructuring: <Building2 className="w-8 h-8" />,
   businessPlans: <BarChart3 className="w-8 h-8" />,
   digitalTransformation: <Zap className="w-8 h-8" />,
   erp: <Server className="w-8 h-8" />,
@@ -28,7 +26,6 @@ export default function Services() {
   const t = (key: string) => getTranslation(language, key);
 
   const services = [
-    { key: "restructuring", icon: serviceIcons.restructuring },
     { key: "businessPlans", icon: serviceIcons.businessPlans },
     { key: "digitalTransformation", icon: serviceIcons.digitalTransformation },
     { key: "erp", icon: serviceIcons.erp },
@@ -86,10 +83,10 @@ export default function Services() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              Why Choose HeresTomorrow
+              {t("services.whyChoose.title")}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We combine strategic expertise with cutting-edge technology to deliver transformational results
+              {t("services.whyChoose.subtitle")}
             </p>
           </div>
 
@@ -97,30 +94,30 @@ export default function Services() {
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="text-primary text-4xl mb-4 font-bold">01</div>
               <h3 className="text-xl font-bold text-foreground mb-3">
-                Proven Expertise
+                {t("services.whyChoose.item1.title")}
               </h3>
               <p className="text-muted-foreground">
-                Deep experience in enterprise transformation, business process optimization, and technology implementation across multiple industries.
+                {t("services.whyChoose.item1.desc")}
               </p>
             </div>
 
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="text-primary text-4xl mb-4 font-bold">02</div>
               <h3 className="text-xl font-bold text-foreground mb-3">
-                Customized Solutions
+                {t("services.whyChoose.item2.title")}
               </h3>
               <p className="text-muted-foreground">
-                Tailored consulting approaches that align with your specific business needs, industry context, and growth objectives.
+                {t("services.whyChoose.item2.desc")}
               </p>
             </div>
 
             <div className="bg-white rounded-2xl border border-neutral-200 p-8 hover:border-primary hover:shadow-lg hover:shadow-primary/10 transition-all duration-300">
               <div className="text-primary text-4xl mb-4 font-bold">03</div>
               <h3 className="text-xl font-bold text-foreground mb-3">
-                AI-Driven Innovation
+                {t("services.whyChoose.item3.title")}
               </h3>
               <p className="text-muted-foreground">
-                Leveraging artificial intelligence and advanced analytics to drive insights and accelerate digital transformation initiatives.
+                {t("services.whyChoose.item3.desc")}
               </p>
             </div>
           </div>
@@ -131,16 +128,16 @@ export default function Services() {
       <section className="py-24 bg-gradient-to-br from-primary via-primary-dark to-primary text-white">
         <div className="max-w-3xl mx-auto text-center px-4">
           <h2 className="text-4xl sm:text-5xl font-bold mb-6">
-            Ready to Transform Your Business?
+            {t("services.cta.title")}
           </h2>
           <p className="text-xl text-white/90 mb-8 leading-relaxed">
-            Let's discuss how HeresTomorrow can help you achieve your strategic goals
+            {t("services.cta.subtitle")}
           </p>
           <a
             href="/contact"
             className="inline-flex items-center justify-center px-10 py-4 bg-white text-primary font-bold rounded-full hover:bg-neutral-100 transition-all duration-300 transform hover:scale-105"
           >
-            Get in Touch
+            {t("services.cta.button")}
           </a>
         </div>
       </section>

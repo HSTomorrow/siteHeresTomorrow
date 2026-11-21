@@ -1,0 +1,660 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 6462
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 22 Tf
+25.2999999999999972 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 773.8585039370078675 Td
+(Matemática Financeira com HP 12C) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+0.42 0.447 0.502 rg
+56.6929133858267775 751.1813385826771992 Td
+(Apostila de estudo — Here's Tomorrow) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 717.1655905511811397 Td
+(1. Conceitos e convenção de sinais) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 694.4884251968503577 Td
+(PV = valor presente; FV = valor futuro; i = taxa por período; n = número de períodos; PMT = parcela. Na) Tj
+T* (HP 12C, valores que saem do caixa são negativos \(tecla CHS\) e os que entram são positivos. PV e FV) Tj
+T* (devem ter sinais opostos. Sempre limpe os registradores com f CLEAR FIN antes de um novo cálculo e) Tj
+T* (confira se taxa e prazo estão na mesma unidade \(mês/mês, ano/ano\).) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 632.1262204724408775 Td
+(2. Juros simples) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 609.4490551181102092 Td
+(Os juros incidem apenas sobre o capital inicial.) Tj
+ET
+0.95 0.96 0.96 rg
+56.6929133858267775 603.7797637795274568 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 11 Tf
+12.6499999999999986 TL
+0.067 0.094 0.153 rg
+65.1968503937007995 589.6065354330708033 Td
+(J = C × i × n        M = C × \(1 + i × n\)) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 566.9293700787401349 Td
+(Exemplo: R$ 1.000 a 2% a.m. por 6 meses -> J = 120,00 e M = 1.120,00.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 561.2600787401573825 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 547.086850393700729 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 547.086850393700729 Td
+(1000 ENTER 0.02 × 6 ×  -> 120,00   1000 +  -> 1.120,00) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 518.7403937007873083 Td
+(3. Juros compostos) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 496.0632283464566399 Td
+(Os juros de cada período se somam ao capital \(juros sobre juros\).) Tj
+ET
+0.95 0.96 0.96 rg
+56.6929133858267775 490.3939370078739444 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 11 Tf
+12.6499999999999986 TL
+0.067 0.094 0.153 rg
+65.1968503937007995 476.2207086614172908 Td
+(FV = PV × \(1 + i\)^n        PV = FV ÷ \(1 + i\)^n) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 453.5435433070865656 Td
+(Exemplo: R$ 1.000 a 2% a.m. por 6 meses -> FV = 1.126,16.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 447.8742519685038701 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 433.7010236220471597 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 433.7010236220471597 Td
+(f CLEAR FIN 1000 CHS PV 2 i 6 n FV  -> 1.126,16) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 405.3545669291337958 Td
+(Exemplo: valor presente de R$ 5.000 em 12 meses a 1,5% a.m. -> PV = 4.181,94.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 399.6852755905511003 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 385.5120472440944468 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 385.5120472440944468 Td
+(f CLEAR FIN 5000 FV 1.5 i 12 n PV  -> -4.181,94) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 357.1655905511810261 Td
+(Atenção: ao calcular n, a HP 12C arredonda o resultado para o próximo inteiro. Para o valor exato use) Tj
+T* (logaritmos: n = ln\(FV/PV\) ÷ ln\(1 + i\).) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 323.1498425196849666 Td
+(4. Taxas equivalentes) Tj
+ET
+0.95 0.96 0.96 rg
+56.6929133858267775 314.6459055118109518 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 11 Tf
+12.6499999999999986 TL
+0.067 0.094 0.153 rg
+65.1968503937007995 300.4726771653542983 Td
+(\(1 + i_anual\) = \(1 + i_mensal\)^12) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 277.7955118110235162 Td
+(1% a.m. equivale a 12,68% a.a.; 12% a.a. equivale a 0,9489% a.m. A taxa proporcional \(12% ÷ 12\) só) Tj
+T* (vale para juros simples.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 257.9529921259841672 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 243.7797637795274568 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 243.7797637795274568 Td
+(f CLEAR FIN 100 CHS PV 1 i 12 n FV 100 -  -> 12,68) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 229.6065354330707748 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 215.4333070866141497 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 215.4333070866141497 Td
+(f CLEAR FIN 100 CHS PV 112 FV 12 n i  -> 0,9489) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 187.086850393700729 Td
+(5. Séries uniformes \(Tabela Price\)) Tj
+ET
+0.95 0.96 0.96 rg
+56.6929133858267775 178.5829133858266857 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 11 Tf
+12.6499999999999986 TL
+0.067 0.094 0.153 rg
+65.1968503937007995 164.4096850393699469 Td
+(PMT = PV × i ÷ [1 - \(1 + i\)^-n]) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 141.7325196850392786 Td
+(Postecipada \(sem entrada, modo END\): R$ 10.000 em 12× a 2% a.m. -> PMT = 945,60. Antecipada) Tj
+T* (\(com entrada, modo BEGIN\): PMT = 945,60 ÷ 1,02 = 927,05.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 121.8899999999999011 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 107.7167716535432191 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 107.7167716535432191 Td
+(g END f CLEAR FIN 10000 PV 2 i 12 n PMT  -> -945,60) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 93.5435433070865088 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 79.3703149606297984 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 79.3703149606297984 Td
+(g BEG f CLEAR FIN 10000 PV 2 i 12 n PMT  -> -927,05) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 3163
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 785.1970866141732586 Td
+(Para descobrir a taxa de um financiamento \(R$ 5.000 à vista ou 10× de R$ 600\): informe PV, PMT) Tj
+T* (\(negativo\) e n e pressione i -> 3,46% a.m.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 765.3545669291338527 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 751.1813385826771992 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 751.1813385826771992 Td
+(f CLEAR FIN 5000 PV 600 CHS PMT 10 n i  -> 3,46) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 722.8348818897637784 Td
+(6. Sistema SAC) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 700.15771653543311 Td
+(Amortização constante \(saldo ÷ n\). Os juros incidem sobre o saldo devedor, que cai a cada mês; por) Tj
+T* (isso as parcelas são decrescentes. Na Tabela Price, ao contrário, as parcelas são constantes e a) Tj
+T* (amortização é crescente.) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 651.9687401574802834 Td
+(7. VPL e TIR) Tj
+ET
+0.95 0.96 0.96 rg
+56.6929133858267775 643.4648031496062686 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 11 Tf
+12.6499999999999986 TL
+0.067 0.094 0.153 rg
+65.1968503937007995 629.291574803149615 Td
+(VPL = -I0 + soma de FCt ÷ \(1 + TMA\)^t) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 606.614409448818833 Td
+(Aceite o projeto se VPL > 0 \(equivalente a TIR > TMA\). Exemplo: investimento de R$ 10.000 e 3 fluxos) Tj
+T* (anuais de R$ 4.000 com TMA de 10% -> VPL = -52,59 e TIR = 9,70% -> rejeitar.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 586.7718897637794271 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 572.5986614173227736 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 572.5986614173227736 Td
+(f CLEAR REG 10000 CHS g CF0 4000 g CFj 3 g Nj 10 i f NPV) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 544.2522047244094665 Td
+(Resultado: -52,59. Em seguida, f IRR -> 9,70.) Tj
+ET
+BT
+/F2 15 Tf
+17.25 TL
+0.118 0.161 0.231 rg
+56.6929133858267775 524.4096850393700606 Td
+(8. Desconto comercial simples) Tj
+ET
+0.95 0.96 0.96 rg
+56.6929133858267775 515.9057480314960458 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 11 Tf
+12.6499999999999986 TL
+0.067 0.094 0.153 rg
+65.1968503937007995 501.7325196850393354 Td
+(D = N × d × n        A = N - D) Tj
+ET
+BT
+/F1 10.5 Tf
+12.0749999999999993 TL
+0.216 0.255 0.318 rg
+56.6929133858267775 479.0553543307086102 Td
+(Título de R$ 2.000 descontado 3 meses antes, a 2% a.m.: D = 120,00 e valor líquido A = 1.880,00.) Tj
+ET
+0.12 0.16 0.22 rg
+56.6929133858267775 473.3860629921259147 481.8897637795275841 -22.677165354330711 re
+f
+BT
+/F6 10 Tf
+11.5 TL
+0.984 0.749 0.141 rg
+65.1968503937007995 459.2128346456692611 Td
+(HP 12C: ) Tj
+ET
+BT
+/F6 10 Tf
+11.5 TL
+1. g
+119.0551181102362364 459.2128346456692611 Td
+(2000 ENTER 0.02 × 3 ×  -> 120,00   2000 x<>y -  -> 1.880,00) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R ]
+/Count 2
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 7 0 R
+/F2 8 0 R
+/F3 9 0 R
+/F4 10 0 R
+/F5 11 0 R
+/F6 12 0 R
+/F7 13 0 R
+/F8 14 0 R
+/F9 15 0 R
+/F10 16 0 R
+/F11 17 0 R
+/F12 18 0 R
+/F13 19 0 R
+/F14 20 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+21 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20261120145840-03'00')
+>>
+endobj
+22 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 23
+0000000000 65535 f 
+0000010018 00000 n 
+0000011843 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000006666 00000 n 
+0000006803 00000 n 
+0000010081 00000 n 
+0000010206 00000 n 
+0000010336 00000 n 
+0000010469 00000 n 
+0000010607 00000 n 
+0000010731 00000 n 
+0000010860 00000 n 
+0000010992 00000 n 
+0000011128 00000 n 
+0000011256 00000 n 
+0000011383 00000 n 
+0000011512 00000 n 
+0000011645 00000 n 
+0000011747 00000 n 
+0000012093 00000 n 
+0000012179 00000 n 
+trailer
+<<
+/Size 23
+/Root 22 0 R
+/Info 21 0 R
+/ID [ <DDDAF41BFAA886FB324E8C6FDDF97496> <DDDAF41BFAA886FB324E8C6FDDF97496> ]
+>>
+startxref
+12283
+%%EOF

@@ -1,24 +1,20 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getTranslation } from "@/lib/translations";
-import { Mail, Phone, MapPin, Leaf } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import Logo from "./Logo";
 
 export default function Footer() {
   const { language } = useLanguage();
   const t = (key: string) => getTranslation(language, key);
 
   return (
-    <footer className="bg-gradient-to-b from-foreground to-foreground/95 text-white">
+    <footer className="bg-gradient-to-b from-foreground to-foreground/95 text-white print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mb-12">
           {/* About */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <Leaf size={18} className="text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-white">{t("company")}</h3>
-            </div>
+            <Logo variant="full" inverted responsive={false} className="mb-4" />
             <p className="text-sm text-white/80 leading-relaxed">{t("footer.about")}</p>
           </div>
 
@@ -32,13 +28,28 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to="/clients" className="text-white/70 hover:text-primary transition-colors duration-300 font-medium">
+                  {t("nav.clients")}
+                </Link>
+              </li>
+              <li>
                 <Link to="/regions" className="text-white/70 hover:text-primary transition-colors duration-300 font-medium">
                   {t("footer.locations")}
                 </Link>
               </li>
               <li>
+                <Link to="/portfolio" className="text-white/70 hover:text-primary transition-colors duration-300 font-medium">
+                  {t("nav.portfolio")}
+                </Link>
+              </li>
+              <li>
                 <Link to="/news" className="text-white/70 hover:text-primary transition-colors duration-300 font-medium">
                   {t("nav.news")}
+                </Link>
+              </li>
+              <li>
+                <Link to="/upload" className="text-white/70 hover:text-primary transition-colors duration-300 font-medium">
+                  {t("nav.materials")}
                 </Link>
               </li>
             </ul>
@@ -75,7 +86,7 @@ export default function Footer() {
 
           {/* Location */}
           <div>
-            <h4 className="text-md font-bold mb-6 text-white">📍 {t("regions.physicalPresence.title").split("-")[1].trim()}</h4>
+            <h4 className="text-md font-bold mb-6 text-white">📍 {t("regions.physicalPresence.title")}</h4>
             <ul className="space-y-3 text-sm text-white/70">
               <li className="font-medium hover:text-primary transition-colors duration-300">
                 {t("regions.physicalPresence.vale")}

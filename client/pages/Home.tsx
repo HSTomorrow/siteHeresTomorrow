@@ -36,7 +36,6 @@ export default function Home() {
   const t = (key: string) => getTranslation(language, key);
 
   const services = [
-    { key: "restructuring", icon: <Building2 className="w-8 h-8" /> },
     { key: "businessPlans", icon: <BarChart3 className="w-8 h-8" /> },
     { key: "digitalTransformation", icon: <Zap className="w-8 h-8" /> },
     { key: "erp", icon: serviceIcons.erp },
@@ -155,7 +154,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Focus Areas
+                  {t("regions.focusAreas")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.latinAmerica.innovation")}
@@ -180,7 +179,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Focus Areas
+                  {t("regions.focusAreas")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.europe.innovation")}
@@ -205,7 +204,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Focus Areas
+                  {t("regions.focusAreas")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.northAmerica.innovation")}
@@ -268,14 +267,13 @@ export default function Home() {
                 </div>
                 <div className="p-6">
                   <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-4">
-                    Featured Article
+                    {t("news.featuredArticle")}
                   </div>
                   <h3 className="text-lg font-bold text-foreground mb-3">
-                    Industry News & Insights
+                    {t("news.placeholderTitle")}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                    Stay updated with the latest technology trends and industry
-                    developments.
+                    {t("news.placeholderDesc")}
                   </p>
                   <Link to="/news" className="inline-flex items-center text-primary font-bold hover:text-primary-dark transition-colors duration-300">
                     {t("news.viewMore")}
