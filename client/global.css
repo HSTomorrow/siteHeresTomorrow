@@ -7,104 +7,104 @@
 
 @layer base {
   /**
-   * Natura-inspired color palette
-   * Natural greens, earth tones, and clean neutrals
+   * Here’s Tomorrow brand palette
+   * Blue + violet from the logo mark, navy neutrals
   */
   :root {
     /* Background & Surface */
     --background: 0 0% 100%;
-    --foreground: 210 10% 25%;
+    --foreground: 233 20% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 10% 25%;
+    --card-foreground: 233 20% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 10% 25%;
+    --popover-foreground: 233 20% 20%;
 
     --surface: 0 0% 100%;
-    --surface-dark: 210 15% 20%;
+    --surface-dark: 233 25% 15%;
 
-    /* Primary: Natural Green (Natura-inspired) */
-    --primary: 140 45% 45%;
-    --primary-light: 140 50% 65%;
-    --primary-dark: 140 50% 35%;
+    /* Primary: Brand Blue */
+    --primary: 229 85% 63%;
+    --primary-light: 229 90% 75%;
+    --primary-dark: 229 70% 45%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Warm Earth Tone */
-    --secondary: 30 55% 65%;
+    /* Secondary: Brand Violet */
+    --secondary: 252 90% 67%;
     --secondary-foreground: 0 0% 100%;
 
     /* Neutral colors */
-    --muted: 210 8% 92%;
-    --muted-foreground: 210 8% 50%;
+    --muted: 233 8% 92%;
+    --muted-foreground: 233 8% 50%;
 
-    --neutral-50: 210 20% 97%;
-    --neutral-100: 210 10% 93%;
-    --neutral-200: 210 8% 88%;
-    --neutral-300: 210 8% 80%;
-    --neutral-400: 210 8% 70%;
+    --neutral-50: 233 20% 97%;
+    --neutral-100: 233 10% 93%;
+    --neutral-200: 233 8% 88%;
+    --neutral-300: 233 8% 80%;
+    --neutral-400: 233 8% 70%;
 
     /* Accent & Destructive */
-    --accent: 30 85% 60%;
+    --accent: 252 90% 67%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 233 40% 98%;
 
     /* Border & Input */
-    --border: 210 8% 90%;
-    --input: 210 8% 95%;
-    --ring: 140 45% 45%;
+    --border: 233 8% 90%;
+    --input: 233 8% 95%;
+    --ring: 229 85% 63%;
 
     --radius: 0.75rem;
 
     /* Sidebar */
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 210 10% 25%;
-    --sidebar-primary: 140 45% 45%;
+    --sidebar-foreground: 233 20% 20%;
+    --sidebar-primary: 229 85% 63%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 8% 93%;
-    --sidebar-accent-foreground: 140 45% 45%;
-    --sidebar-border: 210 8% 90%;
-    --sidebar-ring: 140 45% 45%;
+    --sidebar-accent: 233 8% 93%;
+    --sidebar-accent-foreground: 229 85% 63%;
+    --sidebar-border: 233 8% 90%;
+    --sidebar-ring: 229 85% 63%;
   }
 
   .dark {
-    --background: 210 15% 15%;
+    --background: 233 25% 12%;
     --foreground: 0 0% 95%;
 
-    --card: 210 15% 20%;
+    --card: 233 22% 17%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 210 15% 20%;
+    --popover: 233 22% 17%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 140 45% 55%;
-    --primary-foreground: 210 15% 15%;
+    --primary: 229 85% 68%;
+    --primary-foreground: 233 25% 12%;
 
-    --secondary: 30 55% 65%;
-    --secondary-foreground: 210 15% 15%;
+    --secondary: 252 90% 72%;
+    --secondary-foreground: 233 25% 12%;
 
-    --muted: 210 10% 35%;
-    --muted-foreground: 210 8% 70%;
+    --muted: 233 15% 30%;
+    --muted-foreground: 233 8% 70%;
 
-    --accent: 30 85% 60%;
-    --accent-foreground: 210 15% 15%;
+    --accent: 252 90% 72%;
+    --accent-foreground: 233 25% 12%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 95%;
 
-    --border: 210 10% 30%;
-    --input: 210 10% 25%;
-    --ring: 140 45% 55%;
-    --sidebar-background: 210 15% 18%;
+    --border: 233 15% 28%;
+    --input: 233 15% 22%;
+    --ring: 229 85% 68%;
+    --sidebar-background: 233 22% 15%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 140 45% 55%;
-    --sidebar-primary-foreground: 210 15% 15%;
-    --sidebar-accent: 210 10% 30%;
+    --sidebar-primary: 229 85% 68%;
+    --sidebar-primary-foreground: 233 25% 12%;
+    --sidebar-accent: 233 15% 28%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 210 10% 25%;
-    --sidebar-ring: 140 45% 55%;
+    --sidebar-border: 233 15% 25%;
+    --sidebar-ring: 229 85% 68%;
   }
 }
 
@@ -175,6 +175,17 @@
   code {
     overflow-x: auto;
     white-space: pre;
+  }
+}
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }
 

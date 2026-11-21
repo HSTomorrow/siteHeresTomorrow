@@ -1,4 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
+import Logo from "./Logo";
 
 const languages = [
   { code: "en", name: "English", flag: "🇬🇧" },
@@ -26,19 +27,18 @@ export default function LanguageSelector() {
       {/* Content */}
       <div className="relative z-10 text-center max-w-2xl px-4">
         {/* Logo */}
-        <div className="mb-12 flex items-center justify-center space-x-4">
-          <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-2xl">
-            <span className="text-4xl font-bold font-mono text-primary">&lt;/&gt;</span>
-          </div>
-          <div className="text-left">
-            <div className="text-sm font-bold tracking-widest text-white/80">HERES</div>
-            <div className="text-5xl font-bold text-white leading-tight">&lt;/Today&gt;</div>
-          </div>
+        <div className="mb-12 flex items-center justify-center">
+          <Logo
+            variant="full"
+            inverted
+            responsive={false}
+            className="scale-125 sm:scale-150"
+          />
         </div>
 
         {/* Title */}
         <h1 className="text-5xl sm:text-6xl font-bold text-white mb-6 leading-tight">
-          Welcome to <br /> HeresTomorrow
+          Welcome to <br /> Here’s Tomorrow
         </h1>
 
         <p className="text-xl text-white/90 mb-12 leading-relaxed">

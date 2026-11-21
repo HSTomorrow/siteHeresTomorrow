@@ -10,6 +10,11 @@ import Services from "./pages/Services";
 import News from "./pages/News";
 import Regions from "./pages/Regions";
 import Contact from "./pages/Contact";
+import Portfolio from "./pages/Portfolio";
+import Clients from "./pages/Clients";
+import Upload from "./pages/Upload";
+import Prova from "./pages/Prova";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -32,9 +37,14 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/services" element={<Services />} />
-            <Route path="/news" element={<News />} />
+            <Route path="/clients" element={<Clients />} />
             <Route path="/regions" element={<Regions />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/news" element={<News />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/prova" element={<Prova />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

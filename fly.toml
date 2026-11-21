@@ -1,11 +1,12 @@
-# fly.io configuration for HeresTomorrow
+# fly.io configuration for Here’s Tomorrow
 app = "siteherestomorrow"
 primary_region = "gru"
 
 [env]
   NODE_ENV = "production"
   PORT = "8080"
-
+  MATERIALS_DIR = "/data/materiais"
+  
 [[services]]
   protocol = "tcp"
   internal_port = 8080
@@ -30,3 +31,6 @@ primary_region = "gru"
     grace_period = "45s"
     interval = "15s"
     timeout = "10s"
+[mounts]
+  source = "materiais"
+  destination = "/data"

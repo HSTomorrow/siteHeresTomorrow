@@ -42,7 +42,7 @@ export default function Regions() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Focus Areas
+                  {t("regions.focusAreas")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.latinAmerica.innovation")}
@@ -67,7 +67,7 @@ export default function Regions() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Focus Areas
+                  {t("regions.focusAreas")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.europe.innovation")}
@@ -92,7 +92,7 @@ export default function Regions() {
               </div>
               <div>
                 <p className="text-xs font-bold text-primary mb-2 uppercase tracking-wide">
-                  Focus Areas
+                  {t("regions.focusAreas")}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {t("regions.northAmerica.innovation")}
