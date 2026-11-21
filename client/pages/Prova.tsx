@@ -1,6 +1,7 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
+import ConsultaDocumentos from "@/components/ConsultaDocumentos";
 import { materias, getMateria } from "@/data/materiais";
 import { getQuestoesDaMateria, type PassoHP12C, type Questao } from "@/data/questoes";
 import { cn } from "@/lib/utils";
@@ -601,8 +602,8 @@ export default function Prova() {
 
       <section className="py-14 bg-neutral-50/50 min-h-[50vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {materia && (
-            <div className="max-w-3xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div className="max-w-3xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-3">
+            {materia ? (
               <Link
                 to="/prova"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
@@ -610,14 +611,21 @@ export default function Prova() {
                 <ArrowLeft className="w-4 h-4" />
                 Trocar matéria
               </Link>
-              <PainelReprocessamento
-                key={materia.id}
-                materiaId={materia.id}
-                temGeradas={temGeradas}
-                onConcluido={aposReprocessar}
-              />
+            ) : (
+              <span />
+            )}
+            <div className="flex flex-wrap items-center gap-2">
+              <ConsultaDocumentos key={materia?.id ?? "todas"} materiaAtual={materia?.id} />
+              {materia && (
+                <PainelReprocessamento
+                  key={materia.id}
+                  materiaId={materia.id}
+                  temGeradas={temGeradas}
+                  onConcluido={aposReprocessar}
+                />
+              )}
             </div>
-          )}
+          </div>
           {materia ? (
             <Simulado key={`${materia.id}-${versao}`} todas={todas} />
           ) : (
