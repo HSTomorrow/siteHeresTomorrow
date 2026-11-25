@@ -5,6 +5,7 @@ import { Router } from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import type {
+  ExcluidasResponse,
   QuestaoGerada,
   QuestoesResponse,
   ReprocessamentoStatus,
@@ -68,6 +69,40 @@ async function gravarGeradas(materiaId: string, lista: QuestaoGerada[]) {
   await fs.writeFile(`${destino}.tmp`, JSON.stringify(lista, null, 2));
   await fs.rename(`${destino}.tmp`, destino);
 }
+
+/* ───────────── Questões excluídas do simulado ─────────────
+ * Vale para todos os usuários e para qualquer questão (fixa ou gerada por IA).
+ * Fica em subpasta: GET /api/questoes lê todo *.json da raiz de QUESTIONS_DIR.
+ */
+
+const ARQUIVO_EXCLUIDAS = path.join(QUESTIONS_DIR, "_meta", "excluidas.json");
+let filaExcluidas: Promise<unknown> = Promise.resolve();
+
+async function lerExcluidas(): Promise<string[]> {
+  try {
+    const lista = JSON.parse(await fs.readFile(ARQUIVO_EXCLUIDAS, "utf8"));
+    return Array.isArray(lista) ? lista.filter((id) => typeof id === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Altera a lista em série, para duas exclusões simultâneas não se sobrescreverem */
+function alterarExcluidas(alterar: (ids: Set<string>) => void): Promise<string[]> {
+  const tarefa = filaExcluidas.then(async () => {
+    const ids = new Set(await lerExcluidas());
+    alterar(ids);
+    const lista = [...ids];
+    await fs.mkdir(path.dirname(ARQUIVO_EXCLUIDAS), { recursive: true });
+    await fs.writeFile(`${ARQUIVO_EXCLUIDAS}.tmp`, JSON.stringify(lista, null, 2));
+    await fs.rename(`${ARQUIVO_EXCLUIDAS}.tmp`, ARQUIVO_EXCLUIDAS);
+    return lista;
+  });
+  filaExcluidas = tarefa.catch(() => undefined);
+  return tarefa;
+}
+
+const SCHEMA_IDS = z.object({ ids: z.array(z.string().min(1).max(200)).min(1).max(2000) });
 
 /* ───────────── Saída estruturada ───────────── */
 
@@ -362,8 +397,40 @@ export function questoesRouter(): Router {
         questoes.push(...(await lerGeradas(a.replace(/\.json$/, ""))));
       }
     }
-    const resposta: QuestoesResponse = { questoes };
+    const resposta: QuestoesResponse = { questoes, excluidas: await lerExcluidas() };
     res.json(resposta);
+  });
+
+  // Exclui questões do simulado (para todos)
+  router.post("/api/questoes/excluidas", exigirAdmin, async (req, res) => {
+    const corpo = SCHEMA_IDS.safeParse(req.body);
+    if (!corpo.success) {
+      res.status(400).json({ error: "Informe os ids das questões." });
+      return;
+    }
+    try {
+      const excluidas = await alterarExcluidas((ids) => corpo.data.ids.forEach((id) => ids.add(id)));
+      const resposta: ExcluidasResponse = { excluidas };
+      res.json(resposta);
+    } catch {
+      res.status(500).json({ error: "Não foi possível salvar a exclusão." });
+    }
+  });
+
+  // Devolve questões excluídas ao simulado
+  router.post("/api/questoes/excluidas/restaurar", exigirAdmin, async (req, res) => {
+    const corpo = SCHEMA_IDS.safeParse(req.body);
+    if (!corpo.success) {
+      res.status(400).json({ error: "Informe os ids das questões." });
+      return;
+    }
+    try {
+      const excluidas = await alterarExcluidas((ids) => corpo.data.ids.forEach((id) => ids.delete(id)));
+      const resposta: ExcluidasResponse = { excluidas };
+      res.json(resposta);
+    } catch {
+      res.status(500).json({ error: "Não foi possível restaurar as questões." });
+    }
   });
 
   router.post("/api/questoes/reprocessar", exigirAdmin, async (req, res) => {

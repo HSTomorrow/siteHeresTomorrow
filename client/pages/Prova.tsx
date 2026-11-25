@@ -6,6 +6,7 @@ import { materias, getMateria } from "@/data/materiais";
 import { getQuestoesDaMateria, type PassoHP12C, type Questao } from "@/data/questoes";
 import { cn } from "@/lib/utils";
 import type {
+  ExcluidasResponse,
   QuestaoGerada,
   QuestoesResponse,
   ReprocessamentoStatus,
@@ -19,7 +20,12 @@ import {
   Loader2,
   RefreshCw,
   RotateCcw,
+  Shuffle,
+  SkipForward,
   Sparkles,
+  Star,
+  Trash2,
+  Undo2,
   XCircle,
 } from "lucide-react";
 
@@ -120,9 +126,52 @@ function embaralhar<T>(lista: T[]): T[] {
 
 const LETRAS = ["A", "B", "C", "D", "E", "F"];
 
-function SeletorMateria({ geradas }: { geradas: QuestaoGerada[] }) {
+/* Favoritas são pessoais: ficam salvas neste navegador */
+const CHAVE_FAVORITAS = "prova-questoes-favoritas";
+
+function lerFavoritas(): Set<string> {
+  try {
+    const bruto = localStorage.getItem(CHAVE_FAVORITAS);
+    return new Set(bruto ? (JSON.parse(bruto) as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function salvarFavoritas(ids: Set<string>) {
+  try {
+    localStorage.setItem(CHAVE_FAVORITAS, JSON.stringify([...ids]));
+  } catch {
+    /* sem localStorage: as favoritas valem só nesta tela */
+  }
+}
+
+/* Exclusões valem para todos: ficam no servidor e exigem o token de administrador */
+async function alterarExcluidas(
+  rota: "/api/questoes/excluidas" | "/api/questoes/excluidas/restaurar",
+  ids: string[],
+): Promise<string[]> {
+  const token = lerToken() || window.prompt("Token de administrador:")?.trim() || "";
+  if (!token) throw new Error("Informe o token de administrador.");
+  const r = await fetch(rota, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ ids }),
+  });
+  if (!r.ok) {
+    if (r.status === 401) salvarToken("");
+    throw new Error(await mensagemDeErro(r));
+  }
+  salvarToken(token);
+  const d: ExcluidasResponse = await r.json();
+  return d.excluidas;
+}
+
+function SeletorMateria({ geradas, excluidas }: { geradas: QuestaoGerada[]; excluidas: Set<string> }) {
   const total = (id: string) =>
-    getQuestoesDaMateria(id).length + geradas.filter((g) => g.materiaId === id).length;
+    [...getQuestoesDaMateria(id), ...geradas.filter((g) => g.materiaId === id)].filter(
+      (q) => !excluidas.has(q.id),
+    ).length;
   const disponiveis = materias.filter((m) => total(m.id) > 0);
   return (
     <div className="max-w-3xl mx-auto">
@@ -148,16 +197,28 @@ function SeletorMateria({ geradas }: { geradas: QuestaoGerada[] }) {
   );
 }
 
-function Simulado({ todas }: { todas: Questao[] }) {
-  const [rodada, setRodada] = useState(0);
-  const questoes = useMemo<Questao[]>(
-    () => embaralhar(todas),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [todas, rodada],
-  );
+type Filtro = "todas" | "favoritas";
+
+function Simulado({
+  todas,
+  excluidas,
+  onExcluidasAlteradas,
+}: {
+  todas: Questao[];
+  excluidas: Set<string>;
+  onExcluidasAlteradas: (ids: string[]) => void;
+}) {
+  const [favoritas, setFavoritas] = useState<Set<string>>(lerFavoritas);
+  const [filtro, setFiltro] = useState<Filtro | null>(null);
+  const [questoes, setQuestoes] = useState<Questao[]>([]);
   const [indice, setIndice] = useState(0);
   const [selecionada, setSelecionada] = useState<number | null>(null);
   const [respostas, setRespostas] = useState<Record<string, number>>({});
+  const [excluindo, setExcluindo] = useState(false);
+
+  const disponiveis = todas.filter((q) => !excluidas.has(q.id));
+  const totalFavoritas = disponiveis.filter((q) => favoritas.has(q.id)).length;
+  const excluidasDaMateria = todas.length - disponiveis.length;
 
   const total = questoes.length;
   const finalizado = indice >= total;
@@ -165,8 +226,9 @@ function Simulado({ todas }: { todas: Questao[] }) {
   const respondida = questao ? respostas[questao.id] !== undefined : false;
   const acertos = questoes.filter((q) => respostas[q.id] === q.correta).length;
 
-  const reiniciar = () => {
-    setRodada((r) => r + 1);
+  const iniciar = (f: Filtro) => {
+    setFiltro(f);
+    setQuestoes(embaralhar(f === "favoritas" ? disponiveis.filter((q) => favoritas.has(q.id)) : disponiveis));
     setIndice(0);
     setSelecionada(null);
     setRespostas({});
@@ -182,13 +244,156 @@ function Simulado({ todas }: { todas: Questao[] }) {
     setSelecionada(null);
   };
 
+  /** Traz para a próxima posição uma questão sorteada entre as que ainda faltam */
+  const proximaAleatoria = () => {
+    const restantes = questoes.length - (indice + 1);
+    if (restantes > 1) {
+      const sorteada = indice + 1 + Math.floor(Math.random() * restantes);
+      setQuestoes((lista) => {
+        const copia = [...lista];
+        [copia[indice + 1], copia[sorteada]] = [copia[sorteada], copia[indice + 1]];
+        return copia;
+      });
+    }
+    proxima();
+  };
+
+  const alternarFavorita = () => {
+    if (!questao) return;
+    const novas = new Set(favoritas);
+    if (novas.has(questao.id)) novas.delete(questao.id);
+    else novas.add(questao.id);
+    salvarFavoritas(novas);
+    setFavoritas(novas);
+  };
+
+  const excluir = async () => {
+    if (!questao) return;
+    if (!window.confirm("Excluir esta questão do simulado? Ela deixará de aparecer para todos.")) return;
+    const id = questao.id;
+    setExcluindo(true);
+    try {
+      onExcluidasAlteradas(await alterarExcluidas("/api/questoes/excluidas", [id]));
+      setQuestoes((lista) => lista.filter((q) => q.id !== id));
+      setRespostas((r) => {
+        const resto = { ...r };
+        delete resto[id];
+        return resto;
+      });
+      setSelecionada(null);
+      // o índice continua o mesmo: passa a apontar para a questão seguinte
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : "Falha ao excluir a questão.");
+    } finally {
+      setExcluindo(false);
+    }
+  };
+
+  const restaurarExcluidas = async () => {
+    const plural = excluidasDaMateria === 1 ? "a questão excluída" : `as ${excluidasDaMateria} questões excluídas`;
+    if (!window.confirm(`Restaurar ${plural} desta matéria para todos? O simulado volta ao início.`)) return;
+    try {
+      const ids = todas.filter((q) => excluidas.has(q.id)).map((q) => q.id);
+      onExcluidasAlteradas(await alterarExcluidas("/api/questoes/excluidas/restaurar", ids));
+      setFiltro(null);
+    } catch (err) {
+      window.alert(err instanceof Error ? err.message : "Falha ao restaurar as questões.");
+    }
+  };
+
+  const avisoExcluidas =
+    excluidasDaMateria > 0 ? (
+      <p className="mt-4 text-center text-sm text-muted-foreground">
+        {excluidasDaMateria} {excluidasDaMateria === 1 ? "questão excluída" : "questões excluídas"} ·{" "}
+        <button
+          onClick={restaurarExcluidas}
+          className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+        >
+          <Undo2 className="w-3.5 h-3.5" />
+          Restaurar
+        </button>
+      </p>
+    ) : null;
+
+  if (disponiveis.length === 0 && filtro === null) {
+    return (
+      <div>
+        <p className="text-center text-muted-foreground">Ainda não há questões para esta matéria.</p>
+        {avisoExcluidas}
+      </div>
+    );
+  }
+
+  // Filtro escolhido ao iniciar o simulado
+  if (filtro === null) {
+    const opcoes: { valor: Filtro; titulo: string; descricao: string; qtd: number; icone: JSX.Element }[] = [
+      {
+        valor: "todas",
+        titulo: "Todas as questões",
+        descricao: "Todas as questões disponíveis desta matéria.",
+        qtd: disponiveis.length,
+        icone: <BookOpen className="w-5 h-5" />,
+      },
+      {
+        valor: "favoritas",
+        titulo: "Apenas favoritas",
+        descricao:
+          totalFavoritas > 0
+            ? "Só as questões que você marcou com a estrela."
+            : "Marque questões com a estrela durante o simulado para usar este filtro.",
+        qtd: totalFavoritas,
+        icone: <Star className="w-5 h-5" />,
+      },
+    ];
+    return (
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold font-poppins mb-6 text-center">Quais questões você quer responder?</h2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {opcoes.map((o) => (
+            <button
+              key={o.valor}
+              onClick={() => iniciar(o.valor)}
+              disabled={o.qtd === 0}
+              className="flex flex-col items-start gap-3 text-left p-6 rounded-2xl border border-neutral-200 bg-white hover:border-primary hover:shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-neutral-200 disabled:hover:shadow-none"
+            >
+              <span className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                {o.icone}
+              </span>
+              <span>
+                <span className="block font-semibold text-lg">{o.titulo}</span>
+                <span className="block text-sm text-muted-foreground mt-1">{o.descricao}</span>
+              </span>
+              <span className="text-sm font-semibold text-primary">
+                {o.qtd} {o.qtd === 1 ? "questão" : "questões"}
+              </span>
+            </button>
+          ))}
+        </div>
+        {avisoExcluidas}
+      </div>
+    );
+  }
+
   if (total === 0) {
-    return <p className="text-center text-muted-foreground">Ainda não há questões para esta matéria.</p>;
+    return (
+      <div className="text-center">
+        <p className="text-muted-foreground mb-4">Não sobrou nenhuma questão neste simulado.</p>
+        <button
+          onClick={() => setFiltro(null)}
+          className="inline-flex items-center gap-2 px-6 py-3 border border-neutral-300 font-semibold rounded-full hover:bg-neutral-100 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Voltar ao início
+        </button>
+        {avisoExcluidas}
+      </div>
+    );
   }
 
   if (finalizado) {
     const pct = Math.round((acertos / total) * 100);
     const erradas = questoes.filter((q) => respostas[q.id] !== q.correta);
+    const puladas = questoes.filter((q) => respostas[q.id] === undefined).length;
     return (
       <div className="max-w-3xl mx-auto">
         <div className="text-center p-10 rounded-3xl bg-white border border-neutral-200 shadow-sm mb-10">
@@ -198,14 +403,26 @@ function Simulado({ todas }: { todas: Questao[] }) {
           <p className="text-6xl font-bold font-poppins text-primary mb-2">{pct}%</p>
           <p className="text-lg mb-8">
             Você acertou <strong>{acertos}</strong> de <strong>{total}</strong> questões.
+            {puladas > 0 && (
+              <span className="block text-sm text-muted-foreground mt-1">
+                {puladas} pulada{puladas === 1 ? "" : "s"} sem resposta
+              </span>
+            )}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={reiniciar}
+              onClick={() => iniciar(filtro)}
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
               Refazer prova
+            </button>
+            <button
+              onClick={() => setFiltro(null)}
+              className="inline-flex items-center gap-2 px-6 py-3 border border-neutral-300 font-semibold rounded-full hover:bg-neutral-100 transition-colors"
+            >
+              <Star className="w-4 h-4" />
+              Trocar filtro
             </button>
             <Link
               to="/upload"
@@ -219,14 +436,18 @@ function Simulado({ todas }: { todas: Questao[] }) {
 
         {erradas.length > 0 && (
           <div>
-            <h3 className="text-xl font-bold font-poppins mb-4">Revise as questões que você errou</h3>
+            <h3 className="text-xl font-bold font-poppins mb-4">Revise as questões que você errou ou pulou</h3>
             <div className="space-y-4">
               {erradas.map((q) => (
                 <details key={q.id} className="rounded-2xl border border-neutral-200 bg-white p-5">
                   <summary className="cursor-pointer font-medium">{q.enunciado}</summary>
                   <p className="mt-4 text-sm">
                     <span className="text-red-600 font-semibold">Sua resposta:</span>{" "}
-                    {q.alternativas[respostas[q.id]]}
+                    {respostas[q.id] === undefined ? (
+                      <em className="text-muted-foreground">não respondida</em>
+                    ) : (
+                      q.alternativas[respostas[q.id]]
+                    )}
                   </p>
                   <p className="text-sm">
                     <span className="text-green-700 font-semibold">Resposta correta:</span>{" "}
@@ -239,12 +460,14 @@ function Simulado({ todas }: { todas: Questao[] }) {
             </div>
           </div>
         )}
+        {avisoExcluidas}
       </div>
     );
   }
 
   const respostaDada = respostas[questao.id];
   const acertou = respostaDada === questao.correta;
+  const ehFavorita = favoritas.has(questao.id);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -252,6 +475,7 @@ function Simulado({ todas }: { todas: Questao[] }) {
       <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
         <span>
           Questão {indice + 1} de {total}
+          {filtro === "favoritas" && " · apenas favoritas"}
         </span>
         <span>
           {acertos} acerto{acertos === 1 ? "" : "s"}
@@ -265,11 +489,28 @@ function Simulado({ todas }: { todas: Questao[] }) {
       </div>
 
       <div className="rounded-3xl bg-white border border-neutral-200 shadow-sm p-6 sm:p-10">
-        {questao.origem === "ia" && (
-          <span className="inline-flex items-center gap-1 mb-4 px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 text-[11px] font-bold uppercase tracking-wide">
-            <Sparkles className="w-3 h-3" /> Gerada por IA
-          </span>
-        )}
+        <div className="flex items-start justify-between gap-3 mb-4">
+          {questao.origem === "ia" ? (
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-violet-50 text-violet-700 text-[11px] font-bold uppercase tracking-wide">
+              <Sparkles className="w-3 h-3" /> Gerada por IA
+            </span>
+          ) : (
+            <span />
+          )}
+          <button
+            onClick={alternarFavorita}
+            aria-pressed={ehFavorita}
+            className={cn(
+              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-semibold transition-colors flex-shrink-0",
+              ehFavorita
+                ? "border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                : "border-neutral-300 text-muted-foreground hover:bg-neutral-100",
+            )}
+          >
+            <Star className={cn("w-4 h-4", ehFavorita && "fill-amber-400 text-amber-500")} />
+            {ehFavorita ? "Favorita" : "Favoritar"}
+          </button>
+        </div>
         <h2 className="text-lg sm:text-xl font-semibold leading-relaxed mb-8">{questao.enunciado}</h2>
 
         <div className="space-y-3" role="radiogroup">
@@ -337,7 +578,36 @@ function Simulado({ todas }: { todas: Questao[] }) {
           </div>
         )}
 
-        <div className="mt-8 flex justify-end">
+        <div className="mt-8 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            {!respondida && (
+              <button
+                onClick={proxima}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-neutral-300 text-sm font-semibold hover:bg-neutral-100 transition-colors"
+              >
+                <SkipForward className="w-4 h-4" />
+                {indice + 1 < total ? "Próxima questão" : "Ver resultado"}
+              </button>
+            )}
+            {indice + 1 < total && (
+              <button
+                onClick={proximaAleatoria}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-neutral-300 text-sm font-semibold hover:bg-neutral-100 transition-colors"
+              >
+                <Shuffle className="w-4 h-4" />
+                Próxima aleatória
+              </button>
+            )}
+            <button
+              onClick={excluir}
+              disabled={excluindo}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-red-200 text-red-600 text-sm font-semibold hover:bg-red-50 transition-colors disabled:opacity-50"
+            >
+              {excluindo ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Excluir questão
+            </button>
+          </div>
+
           {!respondida ? (
             <button
               onClick={confirmar}
@@ -349,7 +619,7 @@ function Simulado({ todas }: { todas: Questao[] }) {
           ) : (
             <button
               onClick={proxima}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-primary text-white font-semibold rounded-full hover:bg-primary-dark transition-colors"
             >
               {indice + 1 < total ? "Próxima questão" : "Ver resultado"}
               <ArrowRight className="w-4 h-4" />
@@ -357,6 +627,7 @@ function Simulado({ todas }: { todas: Questao[] }) {
           )}
         </div>
       </div>
+      {avisoExcluidas}
     </div>
   );
 }
@@ -545,6 +816,8 @@ export default function Prova() {
   const [searchParams] = useSearchParams();
   const materia = getMateria(searchParams.get("materia"));
   const [geradas, setGeradas] = useState<QuestaoGerada[]>([]);
+  const [excluidas, setExcluidas] = useState<Set<string>>(new Set());
+  const [carregado, setCarregado] = useState(false);
   const [versao, setVersao] = useState(0);
 
   const carregarGeradas = useCallback(async () => {
@@ -552,10 +825,15 @@ export default function Prova() {
       const r = await fetch("/api/questoes");
       const d: QuestoesResponse = await r.json();
       setGeradas(d.questoes ?? []);
+      setExcluidas(new Set(d.excluidas ?? []));
     } catch {
       setGeradas([]);
+    } finally {
+      setCarregado(true);
     }
   }, []);
+
+  const atualizarExcluidas = useCallback((ids: string[]) => setExcluidas(new Set(ids)), []);
 
   useEffect(() => {
     carregarGeradas();
@@ -615,10 +893,19 @@ export default function Prova() {
               )}
             </div>
           </div>
-          {materia ? (
-            <Simulado key={`${materia.id}-${versao}`} todas={todas} />
+          {!carregado ? (
+            <p className="flex items-center justify-center gap-2 text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" /> Carregando questões...
+            </p>
+          ) : materia ? (
+            <Simulado
+              key={`${materia.id}-${versao}`}
+              todas={todas}
+              excluidas={excluidas}
+              onExcluidasAlteradas={atualizarExcluidas}
+            />
           ) : (
-            <SeletorMateria geradas={geradas} />
+            <SeletorMateria geradas={geradas} excluidas={excluidas} />
           )}
         </div>
       </section>

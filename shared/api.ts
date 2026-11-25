@@ -60,6 +60,16 @@ export interface QuestaoGerada {
 
 export interface QuestoesResponse {
   questoes: QuestaoGerada[];
+  /** Ids das questões (fixas ou geradas) excluídas do simulado, para todos */
+  excluidas: string[];
+}
+
+/**
+ * POST /api/questoes/excluidas e /api/questoes/excluidas/restaurar
+ * (corpo: { ids: string[] }, exige token de administrador)
+ */
+export interface ExcluidasResponse {
+  excluidas: string[];
 }
 
 export interface ReprocessarRequest {
